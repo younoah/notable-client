@@ -8,10 +8,64 @@
     <meta name="author" content="younoah" />
     <title>Notion</title>
     <script src="./src/js/index.js" type="module" defer></script>
-    <link rel="stylesheet" href="./src/css/indes.css" />
     <link rel="icon" type="image/ico" href="./src/images/image.ico" />
+    <link rel="stylesheet" href="./src/css/index.css" />
   </head>
   <body>
-    <main id="app"></main>
+    <div id="app">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="navbar__user">
+          <h3>유저이름</h3>
+        </div>
+        <div class="navbar__btn-add">
+          <button>Add</button>
+        </div>
+        <ul class="navbar__list">
+          <li class="navbar__list__document">
+            문서 <button>추가</button><button>삭제</button>
+          </li>
+          <li class="navbar__list__document">
+            문서 <button>추가</button><button>삭제</button>
+          </li>
+          <ul class="navbar__list">
+            <li class="navbar__list__document">
+              문서 <button>추가</button><button>삭제</button>
+            </li>
+            <ul class="navbar__list">
+              <li class="navbar__list__document">
+                문서 <button>추가</button><button>삭제</button>
+              </li>
+            </ul>
+            <li class="navbar__list__document">
+              문서 <button>추가</button><button>삭제</button>
+            </li>
+            <ul class="navbar__list">
+              <li class="navbar__list__document">
+                문서 <button>추가</button><button>삭제</button>
+              </li>
+            </ul>
+          </ul>
+        </ul>
+        <ul class="navbar__list">
+          <li class="navbar__list__document">
+            문서 <button>추가</button><button>삭제</button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Editor -->
+      <div class="editor">
+        <div class="editor__header">
+          <h1>제목</h1>
+        </div>
+        <div class="editor__title">
+          <input type="text" />
+        </div>
+        <div class="ediotr__content">
+          <textarea name="" id="" cols="30" rows="10"></textarea>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
