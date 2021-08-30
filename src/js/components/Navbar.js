@@ -1,6 +1,7 @@
 'use strict';
 
 import Username from './Username.js';
+import { API } from '../utils/api.js';
 
 export default function Navbar({ $target, initialState }) {
   console.log('--Navbar--');
@@ -23,14 +24,19 @@ export default function Navbar({ $target, initialState }) {
     `;
   };
 
-  this.setState = () => {};
+  // this.setState = nextState => {
+  //   this.state = nextState;
+  //   this.render();
+  // };
 
-  this.render = () => {
+  this.render = async () => {
+    const rootDocuments = await API.getRootDocuments();
+
     $navbar.innerHTML = /* html */ `
       <div class="navbar__user">
         <h3 id="user-title">유저이름</h3>
       </div>
-      ${this.state.map(document => renderDocumentList(document)).join('')}
+      ${rootDocuments.map(document => renderDocumentList(document)).join('')}
     `;
   };
 

@@ -72,5 +72,14 @@ const navbarDummy = [
   },
 ];
 
+const documentDummyForContent = {
+  id: 1,
+  title: '문서1',
+  documents: [],
+  createdAt: '2021-08-29T14:25:55.606Z',
+  updatedAt: '2021-08-29T14:25:55.611Z',
+  content: '문서1 본문 내용',
+};
+
 const $target = $('#app');
 new App({ $target, initialState: navbarDummy });
