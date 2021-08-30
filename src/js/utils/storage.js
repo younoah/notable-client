@@ -1,3 +1,5 @@
+'use strict';
+
 const storage = window.localStorage;
 
 export const getItem = (key, defaultValue) => {
