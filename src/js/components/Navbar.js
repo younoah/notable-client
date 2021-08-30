@@ -12,15 +12,13 @@ export default function Navbar({ $target, initialState }) {
   $navbar.addEventListener('click', ({ target }) => {});
 
   const renderDocumentList = function recur(document) {
-    const childDocuments = document.documents;
-
     return /* html */ `
       <ul class="navbar__list">
         <li data-id="${document.id}" class="navbar__list__document">
           ${document.title} <button class="add-document-button">추가</button
           ><button class="delete-document-button">삭제</button>
         </li>
-        ${childDocuments.map(document => recur(document)).join('')}
+        ${document.documents.map(document => recur(document)).join('')}
       </ul>
     `;
   };
