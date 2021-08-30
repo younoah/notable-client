@@ -10,7 +10,24 @@ export default function Navbar({ $target, initialState }) {
   $navbar.className = 'navbar';
 
   $target.append($navbar);
-  $navbar.addEventListener('click', ({ target }) => {});
+  $navbar.addEventListener('click', ({ target }) => {
+    if (target.matches('.add-document-button')) {
+      console.log('add-document-button click!');
+      const $li = target.closest('li');
+      const { id } = $li.dataset;
+      addChildDocument(Number(id));
+      this.render();
+      return;
+    }
+
+    if (target.matches('.delete-document-button')) {
+      console.log('delete-document-button click!');
+      const $li = target.closest('li');
+      const { id } = $li.dataset;
+
+      return;
+    }
+  });
 
   const renderDocumentList = function recur(document) {
     return /* html */ `
@@ -24,10 +41,22 @@ export default function Navbar({ $target, initialState }) {
     `;
   };
 
-  // this.setState = nextState => {
-  //   this.state = nextState;
-  //   this.render();
-  // };
+  const addChildDocument = async (id = null) => {
+    const title = prompt('새로 추가할 문서의 제목을 작성해주세요.');
+
+    if (!title) return;
+
+    const document = {
+      parent: id,
+      title,
+    };
+
+    await API.addDocument(document);
+  };
+
+  const deleteDocument = async id => {
+    await API.deleteDocument(id);
+  };
 
   this.render = async () => {
     const rootDocuments = await API.getRootDocuments();
