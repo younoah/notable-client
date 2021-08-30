@@ -7,17 +7,17 @@ const option = {
     headers: { 'Content-Type': 'application/json', 'x-username': 'younoah' },
   }),
   post: contents => ({
-    methods: 'POST',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-username': 'younoah' },
     body: JSON.stringify(contents),
   }),
   put: contents => ({
-    methods: 'PUT',
+    method: 'PUT',
     headers: { 'Content-Type': 'application/json', 'x-username': 'younoah' },
     body: JSON.stringify(contents),
   }),
   delete: () => ({
-    methods: 'DELETE',
+    method: 'DELETE',
     headers: { 'Content-Type': 'application/json', 'x-username': 'younoah' },
   }),
 };
@@ -32,7 +32,7 @@ const request = async (url, option = {}) => {
 
     return await response.json();
   } catch (error) {
-    alert(`💣 API Request Error : ${error} 💣`);
+    alert(`💣 API Request Error - ${error} 💣`);
   }
 };
 
@@ -41,11 +41,8 @@ export const API = {
     return request('/documents', option.get());
   },
   addDocument: document => {
-    const content = {
-      title: document.title,
-      parent: document.parent,
-    };
-    return request('/documents', option.post(content));
+    console.log(JSON.stringify(document));
+    return request('/documents', option.post(document));
   },
   getDocument: id => {
     return request(`/documents/${id}`, option.get());
