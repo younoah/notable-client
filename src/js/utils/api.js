@@ -41,7 +41,6 @@ export const API = {
     return request('/documents', option.get());
   },
   addDocument: document => {
-    console.log(JSON.stringify(document));
     return request('/documents', option.post(document));
   },
   getDocument: id => {

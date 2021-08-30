@@ -10,12 +10,19 @@ export default function Navbar({ $target, initialState }) {
   $navbar.className = 'navbar';
 
   $target.append($navbar);
-  $navbar.addEventListener('click', ({ target }) => {
+  $navbar.addEventListener('click', async ({ target }) => {
+    if (target.matches('.add-root-document-button')) {
+      console.log('add-root-document-button click!');
+      await addChildDocument();
+      this.render();
+      return;
+    }
+
     if (target.matches('.add-document-button')) {
       console.log('add-document-button click!');
       const $li = target.closest('li');
       const { id } = $li.dataset;
-      addChildDocument(Number(id));
+      await addChildDocument(Number(id));
       this.render();
       return;
     }
@@ -24,7 +31,8 @@ export default function Navbar({ $target, initialState }) {
       console.log('delete-document-button click!');
       const $li = target.closest('li');
       const { id } = $li.dataset;
-
+      await deleteDocument(Number(id));
+      this.render();
       return;
     }
   });
@@ -59,11 +67,15 @@ export default function Navbar({ $target, initialState }) {
   };
 
   this.render = async () => {
+    console.log('render!');
     const rootDocuments = await API.getRootDocuments();
 
     $navbar.innerHTML = /* html */ `
       <div class="navbar__user">
         <h3 id="user-title">유저이름</h3>
+      </div>
+      <div class="navbar__btn-add">
+          <button class="add-root-document-button">Add</button>
       </div>
       ${rootDocuments.map(document => renderDocumentList(document)).join('')}
     `;
