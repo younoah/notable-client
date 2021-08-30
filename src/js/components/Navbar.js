@@ -11,6 +11,20 @@ export default function Navbar({ $target, initialState }) {
   $target.append($navbar);
   $navbar.addEventListener('click', ({ target }) => {});
 
+  const renderDocumentList = function recur(document) {
+    const childDocuments = document.documents;
+
+    return /* html */ `
+      <ul class="navbar__list">
+        <li data-id="${document.id}" class="navbar__list__document">
+          ${document.title} <button class="add-document-button">추가</button
+          ><button class="delete-document-button">삭제</button>
+        </li>
+        ${childDocuments.map(document => recur(document)).join('')}
+      </ul>
+    `;
+  };
+
   this.setState = () => {};
 
   this.render = () => {
@@ -18,18 +32,7 @@ export default function Navbar({ $target, initialState }) {
       <div class="navbar__user">
         <h3 id="user-title">유저이름</h3>
       </div>
-      ${this.state
-        .map(
-          document => /* html */ `
-            <ul class="navbar__list">
-              <li data-id="${document.id}" class="navbar__list__document">
-                ${document.title} <button class="add-document-button">추가</button
-                ><button class="delete-document-button">삭제</button>
-              </li>
-            </ul>
-          `
-        )
-        .join('')}
+      ${this.state.map(document => renderDocumentList(document)).join('')}
     `;
   };
 
