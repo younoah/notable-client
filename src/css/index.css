@@ -21,6 +21,13 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 /* App */
 #app {
   display: flex;
@@ -34,4 +41,5 @@
 /* Editor */
 .editor {
   background-color: var(--color-light-grey);
+  top: calc(1em + 2em);
 }
