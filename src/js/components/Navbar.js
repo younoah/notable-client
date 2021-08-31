@@ -3,7 +3,12 @@
 import Username from './Username.js';
 import { API } from '../utils/api.js';
 
-export default function Navbar({ $target, initialState, onClickDocument }) {
+export default function Navbar({
+  $target,
+  initialState = {},
+  onClickDocument,
+  onUpdateEditor,
+}) {
   console.log('--Navbar--');
   this.state = initialState;
   const $navbar = document.createElement('nav');
@@ -18,17 +23,19 @@ export default function Navbar({ $target, initialState, onClickDocument }) {
 
     if (target.matches('.add-root-document-button')) {
       console.log('add-root-document-button click!');
-      await addChildDocument();
+      const { id } = await addChildDocument();
       this.render();
+      onClickDocument(Number(id));
       return;
     }
 
     if (target.matches('.add-document-button')) {
       console.log('add-document-button click!');
       const $li = target.closest('li');
-      const { id } = $li.dataset;
-      await addChildDocument(Number(id));
+      const { id: parentId } = $li.dataset;
+      const { id } = await addChildDocument(Number(parentId));
       this.render();
+      onClickDocument(Number(id));
       return;
     }
 
@@ -38,6 +45,7 @@ export default function Navbar({ $target, initialState, onClickDocument }) {
       const { id } = $li.dataset;
       await deleteDocument(Number(id));
       this.render();
+      onUpdateEditor();
       return;
     }
   });
@@ -59,12 +67,13 @@ export default function Navbar({ $target, initialState, onClickDocument }) {
 
     if (!title) return;
 
+    console.log(id);
     const document = {
       parent: id,
       title,
     };
 
-    await API.addDocument(document);
+    return await API.addDocument(document);
   };
 
   const deleteDocument = async id => {

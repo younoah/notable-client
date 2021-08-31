@@ -16,10 +16,15 @@ export default function App({ $target, initialState }) {
     navbar.render();
   };
 
+  const handleResetEdiotr = () => {
+    editor.setState({});
+  };
+
   const navbar = new Navbar({
     $target,
     initialState: this.state,
     onClickDocument: handleClickDocument,
+    onUpdateEditor: handleResetEdiotr,
   });
 
   const editor = new Editor({
