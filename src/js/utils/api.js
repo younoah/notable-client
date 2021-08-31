@@ -47,11 +47,7 @@ export const API = {
     return request(`/documents/${id}`, option.get());
   },
   updateDocument: (id, document) => {
-    const content = {
-      title: document.title,
-      parent: document.parent,
-    };
-    return request(`/documents/${id}`, option.put(content));
+    return request(`/documents/${id}`, option.put(document));
   },
   deleteDocument: id => {
     return request(`/documents/${id}`, option.delete());

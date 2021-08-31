@@ -1,21 +1,40 @@
 'use strict';
 
-const documentDummyForContent = {
-  id: 1,
-  title: '문서1 제목',
-  documents: [],
-  createdAt: '2021-08-29T14:25:55.606Z',
-  updatedAt: '2021-08-29T14:25:55.611Z',
-  content: '문서1 본문 내용',
-};
+import { $ } from '../utils/dom.js';
+import { API } from '../utils/api.js';
 
-export default function Editor({ $target, initialState = {} }) {
+export default function Editor({
+  $target,
+  initialState = {},
+  onUpdateDocumentList,
+}) {
   const $editor = document.createElement('div');
   $target.append($editor);
 
+  let timer = null;
+
   $editor.addEventListener('keyup', ({ target }) => {
-    console.log('Editor - keyup');
+    if (timer !== null) {
+      clearTimeout(timer);
+    }
+
+    const id = this.state.id;
+    const title = $('.title', $editor).value.trim();
+    const content = $('[name=content]', $editor).value.trim();
+
+    timer = setTimeout(() => {
+      updateDocument(id, title, content);
+    }, 2000);
   });
+
+  const updateDocument = async (id, title, content) => {
+    const document = {
+      title,
+      content,
+    };
+    await API.updateDocument(id, document);
+    onUpdateDocumentList();
+  };
 
   this.state = initialState;
 
@@ -27,7 +46,7 @@ export default function Editor({ $target, initialState = {} }) {
   this.render = () => {
     $editor.innerHTML = /* html */ `
       <div class="editor__title">
-        <input type="text" style="width: 800px" value="${
+        <input class='title' type="text" style="width: 800px" value="${
           this.state.title || ''
         }"/>
       </div>

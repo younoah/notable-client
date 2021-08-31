@@ -12,6 +12,10 @@ export default function App({ $target, initialState }) {
     editor.setState(document);
   };
 
+  const handleUpdateDocumentList = () => {
+    navbar.render();
+  };
+
   const navbar = new Navbar({
     $target,
     initialState: this.state,
@@ -21,6 +25,7 @@ export default function App({ $target, initialState }) {
   const editor = new Editor({
     $target,
     initialState: this.state,
+    onUpdateDocumentList: handleUpdateDocumentList,
   });
 
   this.setState = () => {};

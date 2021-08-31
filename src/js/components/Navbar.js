@@ -71,6 +71,11 @@ export default function Navbar({ $target, initialState, onClickDocument }) {
     await API.deleteDocument(id);
   };
 
+  this.setState = nextState => {
+    this.state = nextState;
+    this.render();
+  };
+
   this.render = async () => {
     console.log('render!');
     const rootDocuments = await API.getRootDocuments();
