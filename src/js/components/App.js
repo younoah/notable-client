@@ -34,6 +34,11 @@ export default function App({ $target, initialState }) {
   this.setState = () => {};
 
   this.render = () => {
+    const { pathname } = location;
+    console.log('pathname: ', pathname);
+    const params = new URLSearchParams(pathname);
+    console.log('params: ', params);
+
     navbar.setState();
     editor.render();
   };
