@@ -8,10 +8,10 @@ export default function Editor({
   initialState = {},
   onUpdateDocumentList,
 }) {
-  const $editor = document.createElement('div');
-  $target.append($editor);
-
   let timer = null;
+  const $editor = document.createElement('div');
+  $editor.className = 'editor';
+  $target.append($editor);
 
   $editor.addEventListener('keyup', ({ target }) => {
     if (timer !== null) {
@@ -44,21 +44,24 @@ export default function Editor({
   };
 
   this.render = () => {
-    $editor.innerHTML = /* html */ `
-      <div class="editor__title">
-        <input class='title' type="text" style="width: 800px" value="${
-          this.state.title || ''
-        }"/>
-      </div>
-      <div class="editor__content">
-        <textarea
-          name="content"
-          id="content"
-          style="width: 800px; height: 400px"
-        >${this.state.content || ''}</textarea>
-      </div>
-    `;
-  };
+    if (Object.keys(this.state).length <= 0) {
+      $editor.innerHTML = /* html */ `<h1>나만의 작은 문서공간!</h1>`;
+      return;
+    }
 
-  this.render();
+    $editor.innerHTML = /* html */ `
+    <div class="editor__title">
+      <input class='title' type="text" style="width: 800px" value="${
+        this.state.title || ''
+      }"/>
+    </div>
+    <div class="editor__content">
+      <textarea
+        name="content"
+        id="content"
+        style="width: 800px; height: 400px"
+      >${this.state.content || ''}</textarea>
+    </div>
+  `;
+  };
 }

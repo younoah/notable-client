@@ -5,11 +5,10 @@ import { API } from '../utils/api.js';
 
 export default function Navbar({
   $target,
-  initialState = {},
+  initialState,
   onClickDocument,
   onUpdateEditor,
 }) {
-  console.log('--Navbar--');
   this.state = initialState;
   const $navbar = document.createElement('nav');
   $navbar.className = 'navbar';
@@ -22,29 +21,26 @@ export default function Navbar({
     }
 
     if (target.matches('.add-root-document-button')) {
-      console.log('add-root-document-button click!');
-      const { id } = await addChildDocument();
-      this.render();
+      const { id } = await addDocument();
+      this.setState();
       onClickDocument(Number(id));
       return;
     }
 
     if (target.matches('.add-document-button')) {
-      console.log('add-document-button click!');
       const $li = target.closest('li');
       const { id: parentId } = $li.dataset;
-      const { id } = await addChildDocument(Number(parentId));
-      this.render();
+      const { id } = await addDocument(Number(parentId));
+      this.setState();
       onClickDocument(Number(id));
       return;
     }
 
     if (target.matches('.delete-document-button')) {
-      console.log('delete-document-button click!');
       const $li = target.closest('li');
       const { id } = $li.dataset;
       await deleteDocument(Number(id));
-      this.render();
+      this.setState();
       onUpdateEditor();
       return;
     }
@@ -62,15 +58,14 @@ export default function Navbar({
     `;
   };
 
-  const addChildDocument = async (id = null) => {
-    const title = prompt('새로 추가할 문서의 제목을 작성해주세요.');
+  const addDocument = async (id = null) => {
+    const title = prompt('새로 추가할 문서의 제목을 작성해주세요.').trim();
 
-    if (!title) return;
+    if (title === null) return;
 
-    console.log(id);
     const document = {
       parent: id,
-      title,
+      title: title !== '' ? title : '제목없음',
     };
 
     return await API.addDocument(document);
@@ -80,15 +75,12 @@ export default function Navbar({
     await API.deleteDocument(id);
   };
 
-  this.setState = nextState => {
-    this.state = nextState;
+  this.setState = async () => {
+    this.state = await API.getRootDocuments();
     this.render();
   };
 
   this.render = async () => {
-    console.log('render!');
-    const rootDocuments = await API.getRootDocuments();
-
     $navbar.innerHTML = /* html */ `
       <div class="navbar__user">
         <h3 id="user-title">유저이름</h3>
@@ -96,9 +88,7 @@ export default function Navbar({
       <div class="navbar__btn-add">
           <button class="add-root-document-button">Add</button>
       </div>
-      ${rootDocuments.map(document => renderDocumentList(document)).join('')}
+      ${this.state.map(document => renderDocumentList(document)).join('')}
     `;
   };
-
-  this.render();
 }

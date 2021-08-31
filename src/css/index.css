@@ -36,10 +36,20 @@ body {
 /* Navbar */
 .navbar {
   background-color: var(--color-light-grey);
+  width: 15vw;
+  height: 100vh;
+  overflow: scroll;
+}
+
+.navbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Editor */
 .editor {
-  background-color: var(--color-light-grey);
+  background-color: var(--color-light-white);
   top: calc(1em + 2em);
+  width: 85vw;
+  height: 100vh;
+  padding: 20px;
 }

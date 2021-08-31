@@ -13,29 +13,30 @@ export default function App({ $target, initialState }) {
   };
 
   const handleUpdateDocumentList = () => {
-    navbar.render();
+    navbar.setState();
   };
 
-  const handleResetEdiotr = () => {
+  const handleResetEditor = () => {
     editor.setState({});
   };
 
   const navbar = new Navbar({
     $target,
-    initialState: this.state,
     onClickDocument: handleClickDocument,
-    onUpdateEditor: handleResetEdiotr,
+    onUpdateEditor: handleResetEditor,
   });
 
   const editor = new Editor({
     $target,
-    initialState: this.state,
     onUpdateDocumentList: handleUpdateDocumentList,
   });
 
   this.setState = () => {};
 
-  this.render = () => {};
+  this.render = () => {
+    navbar.setState();
+    editor.render();
+  };
 
   this.render();
 }
