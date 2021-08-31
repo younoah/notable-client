@@ -3,7 +3,7 @@
 import Username from './Username.js';
 import { API } from '../utils/api.js';
 
-export default function Navbar({ $target, initialState }) {
+export default function Navbar({ $target, initialState, onClickDocument }) {
   console.log('--Navbar--');
   this.state = initialState;
   const $navbar = document.createElement('nav');
@@ -11,6 +11,11 @@ export default function Navbar({ $target, initialState }) {
 
   $target.append($navbar);
   $navbar.addEventListener('click', async ({ target }) => {
+    if (target.matches('.navbar__list__document')) {
+      const { id } = target.dataset;
+      onClickDocument(Number(id));
+    }
+
     if (target.matches('.add-root-document-button')) {
       console.log('add-root-document-button click!');
       await addChildDocument();
