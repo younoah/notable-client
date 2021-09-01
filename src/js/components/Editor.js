@@ -55,7 +55,9 @@ export default function Editor({
       <div class="editor__line"></div>
     </div>
     <div class="editor__content-container" >
-      <div class="editor__content" contenteditable="true">${this.state.content}</div>
+      <div class="editor__content" contenteditable="true">${
+        this.state.content || ''
+      }</div>
     </div>
   `;
   };

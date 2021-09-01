@@ -1,6 +1,6 @@
 'use strict';
 
-import Username from './Username.js';
+import { $ } from '../utils/dom.js';
 import { API } from '../utils/api.js';
 import { dispatchRouteEvent } from '../utils/router.js';
 
@@ -16,8 +16,24 @@ export default function Navbar({
 
   $target.append($navbar);
   $navbar.addEventListener('click', async ({ target }) => {
-    if (target.matches('.navbar__list__document')) {
-      const { id } = target.dataset;
+    if (target.matches('.change-user-button')) {
+      const username = prompt(
+        '변경하길 원하는 유저이름을 작성해주세요.'
+      ).trim();
+
+      if (username === '') return;
+
+      const $userTitle = $('#user-title', $navbar);
+      $userTitle.innerText = username;
+    }
+
+    if (target.matches('.logo-image')) {
+      dispatchRouteEvent(`/`);
+      return;
+    }
+
+    if (target.matches('.document-title')) {
+      const { id } = target.closest('li').dataset;
       onClickDocument(Number(id));
       dispatchRouteEvent(`/documents/${id}`);
     }
@@ -57,7 +73,8 @@ export default function Navbar({
     return /* html */ `
       <ul class="navbar__list">
         <li data-id="${document.id}" class="navbar__list__document">
-          ${document.title} <button class="add-document-button">추가</button
+          <p class="document-title">${document.title}</p>
+          <button class="add-document-button">추가</button
           ><button class="delete-document-button">삭제</button>
         </li>
         ${document.documents.map(document => recur(document)).join('')}
@@ -90,7 +107,9 @@ export default function Navbar({
   this.render = async () => {
     $navbar.innerHTML = /* html */ `
       <div class="navbar__user">
+        <img class="logo-image" src="/src/images/image.ico" alt="로고" />
         <h3 id="user-title">유저이름</h3>
+        <button class="change-user-button">변경</button>
       </div>
       <div class="navbar__btn-add">
           <button class="add-root-document-button">Add</button>

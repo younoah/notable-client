@@ -40,7 +40,8 @@ export default function App({ $target, initialState }) {
     const { pathname } = location;
 
     if (pathname === '/') {
-      editor.render();
+      console.log('루트!!');
+      editor.setState({});
     } else if (pathname.indexOf('/documents/') === 0) {
       const [, , id] = pathname.split('/');
       const document = await API.getDocument(id);

@@ -44,6 +44,51 @@ body {
   display: none;
 }
 
+.navbar__user {
+  display: flex;
+  height: 50px;
+  margin: 5px 10px;
+}
+
+.change-user-button {
+  cursor: pointer;
+}
+/* #user-title {
+  cursor: pointer;
+} */
+
+.logo-image {
+  cursor: pointer;
+  margin: 5px;
+}
+
+.user-title {
+  margin: 5px;
+}
+
+.navbar__list__document {
+  cursor: pointer;
+}
+
+.document-title {
+  display: inline;
+}
+
+.document-title:hover {
+  background-color: var(--color-dark-white);
+}
+
+.add-document-button,
+.delete-document-button,
+.add-root-document-button {
+  cursor: pointer;
+}
+
+.navbar__btn-add {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
 /* Editor */
 .editor {
   background-color: var(--color-pink);
