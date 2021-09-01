@@ -2,6 +2,7 @@
 
 import Username from './Username.js';
 import { API } from '../utils/api.js';
+import { dispatchRouteEvent } from '../utils/router.js';
 
 export default function Navbar({
   $target,
@@ -18,12 +19,14 @@ export default function Navbar({
     if (target.matches('.navbar__list__document')) {
       const { id } = target.dataset;
       onClickDocument(Number(id));
+      dispatchRouteEvent(`/documents/${id}`);
     }
 
     if (target.matches('.add-root-document-button')) {
       const { id } = await addDocument();
       this.setState();
       onClickDocument(Number(id));
+      dispatchRouteEvent(`/documents/${id}`);
       return;
     }
 
@@ -33,6 +36,8 @@ export default function Navbar({
       const { id } = await addDocument(Number(parentId));
       this.setState();
       onClickDocument(Number(id));
+      dispatchRouteEvent(`/documents/${id}`);
+
       return;
     }
 
@@ -42,6 +47,7 @@ export default function Navbar({
       await deleteDocument(Number(id));
       this.setState();
       onUpdateEditor();
+      dispatchRouteEvent(`/`);
       return;
     }
   });

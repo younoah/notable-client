@@ -3,6 +3,7 @@
 import Navbar from './Navbar.js';
 import Editor from './Editor.js';
 import { API } from '../utils/api.js';
+import { catchRouteEvent } from '../utils/router.js';
 
 export default function App({ $target, initialState }) {
   this.state = initialState;
@@ -33,15 +34,20 @@ export default function App({ $target, initialState }) {
 
   this.setState = () => {};
 
-  this.render = () => {
-    const { pathname } = location;
-    console.log('pathname: ', pathname);
-    const params = new URLSearchParams(pathname);
-    console.log('params: ', params);
-
+  this.render = async () => {
     navbar.setState();
-    editor.render();
+
+    const { pathname } = location;
+
+    if (pathname === '/') {
+      editor.render();
+    } else if (pathname.indexOf('/documents/') === 0) {
+      const [, , id] = pathname.split('/');
+      const document = await API.getDocument(id);
+      editor.setState(document);
+    }
   };
 
   this.render();
+  catchRouteEvent(() => this.render());
 }
