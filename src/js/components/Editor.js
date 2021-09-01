@@ -19,8 +19,8 @@ export default function Editor({
     }
 
     const id = this.state.id;
-    const title = $('.title', $editor).value.trim();
-    const content = $('[name=content]', $editor).value.trim();
+    const title = $('.editor__title', $editor).innerText.trim();
+    const content = $('.editor__content', $editor).innerText.trim();
 
     timer = setTimeout(() => {
       updateDocument(id, title, content);
@@ -50,15 +50,12 @@ export default function Editor({
     }
 
     $editor.innerHTML = /* html */ `
-    <div class="editor__title">
-      <input class='title' type="text" style="width: 800px" value="${this.state.title}"/>
+    <div class="editor__title-container">
+      <h1 class="editor__title" contenteditable="true">${this.state.title}</h1>
+      <div class="editor__line"></div>
     </div>
-    <div class="editor__content">
-      <textarea
-        name="content"
-        id="content"
-        style="width: 800px; height: 400px"
-      >${this.state.content}</textarea>
+    <div class="editor__content-container" >
+      <div class="editor__content" contenteditable="true">${this.state.content}</div>
     </div>
   `;
   };
