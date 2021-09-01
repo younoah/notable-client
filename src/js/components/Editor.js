@@ -51,16 +51,14 @@ export default function Editor({
 
     $editor.innerHTML = /* html */ `
     <div class="editor__title">
-      <input class='title' type="text" style="width: 800px" value="${
-        this.state.title || ''
-      }"/>
+      <input class='title' type="text" style="width: 800px" value="${this.state.title}"/>
     </div>
     <div class="editor__content">
       <textarea
         name="content"
         id="content"
         style="width: 800px; height: 400px"
-      >${this.state.content || ''}</textarea>
+      >${this.state.content}</textarea>
     </div>
   `;
   };

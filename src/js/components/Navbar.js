@@ -42,6 +42,7 @@ export default function Navbar({
     }
 
     if (target.matches('.delete-document-button')) {
+      if (!confirm('정말 해당 문서를 삭제하시겠습니까?')) return;
       const $li = target.closest('li');
       const { id } = $li.dataset;
       await deleteDocument(Number(id));
