@@ -4,7 +4,9 @@
   --black-color: #140a00;
   --blue-color: #185adb;
   --light-blue-color: #afb9c8;
+  --dark-blue-color: #4b6587;
   --red-color: #99154e;
+  /* --dark-grey-color: darkgrey; */
   --grey-dark-color: #909090;
   --grey-light-color: #efefef;
 
@@ -104,6 +106,7 @@ main {
 }
 
 .add-root-button {
+  margin-top: var(--padding);
   font-size: var(--font-large);
 }
 
@@ -124,6 +127,21 @@ main {
 
 .document-list.hide {
   display: none;
+}
+
+.more-button {
+  font-size: var(--font-medium);
+  color: var(--grey-dark-color);
+}
+
+.more-button i {
+  padding: 0 calc(var(--padding) / 2);
+}
+
+.more-button:hover {
+  background-color: var(--dark-blue-color);
+  border-radius: 4px;
+  color: var(--light-blue-color);
 }
 
 .more-button.clicked {

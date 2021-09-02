@@ -56,6 +56,7 @@ export default function Editor({
         this.state.content || ''
       }</div>
     </div>
+    <div class="content-bottom"></div>
   `;
   };
 }

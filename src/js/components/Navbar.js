@@ -16,7 +16,7 @@ export default function Navbar({
 
   $target.append($navbar);
   $navbar.addEventListener('click', async ({ target }) => {
-    console.log('target: ', target);
+    console.log(target);
     if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
       dispatchRouteEvent(`/`);
       return;
@@ -62,6 +62,11 @@ export default function Navbar({
       dispatchRouteEvent(`/`);
       return;
     }
+
+    if (target.matches('.fa-caret-right')) {
+      const $moreButton = target.closest('.more-button');
+      $moreButton.classList.toggle('clicked');
+    }
   });
 
   const renderDocumentList = function recur(document) {
@@ -106,13 +111,13 @@ export default function Navbar({
   };
 
   this.setState = async () => {
-    console.log('네비바 렌더링');
+    console.log('navbar - setState');
     this.state = await API.getRootDocuments();
     this.render();
   };
 
   this.render = async () => {
-    console.log('네비바 렌더링');
+    console.log('navbar - render');
     $navbar.innerHTML = /* html */ `
       <header class="sidebar__header">
         <div class="logo">
