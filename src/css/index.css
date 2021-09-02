@@ -168,6 +168,11 @@ main {
   border-radius: 4px;
 }
 
+.document-container.clicked {
+  background-color: var(--light-blue-color);
+  border-radius: 4px;
+}
+
 .dot {
   font-size: 2px;
   margin: auto 3px;

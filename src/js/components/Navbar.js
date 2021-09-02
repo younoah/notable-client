@@ -24,10 +24,13 @@ export default function Navbar({
 
     if (target.matches('.document-title')) {
       const { id } = target.closest('li').dataset;
-      const $prevClickedTitle = $('.clicked');
+      const $clickedDocumentContainer = $('.document-container.clicked ');
+      const $documentContainer = target.closest('.document-container');
 
-      $prevClickedTitle && $prevClickedTitle.classList.toggle('clicked');
-      target.classList.toggle('clicked');
+      if ($clickedDocumentContainer !== null) {
+        $clickedDocumentContainer.classList.remove('clicked');
+      }
+      $documentContainer.classList.toggle('clicked');
 
       onClickDocument(Number(id));
       dispatchRouteEvent(`/documents/${id}`);
