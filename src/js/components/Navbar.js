@@ -7,8 +7,8 @@ import { dispatchRouteEvent } from '../utils/router.js';
 export default function Navbar({
   $target,
   initialState,
-  onClickDocument,
   onUpdateEditor,
+  onResetEditor,
 }) {
   this.state = initialState;
   const $navbar = document.createElement('nav');
@@ -24,59 +24,68 @@ export default function Navbar({
     if (target.matches('.document-title')) {
       const { id } = target.closest('li').dataset;
       const $clickedDocumentContainer = $('.document-container.clicked ');
-      const $documentContainer = target.closest('.document-container');
+      const $targetDocumentContainer = target.closest('.document-container');
 
       if ($clickedDocumentContainer !== null) {
         $clickedDocumentContainer.classList.remove('clicked');
       }
-      $documentContainer.classList.toggle('clicked');
+      $targetDocumentContainer.classList.toggle('clicked');
 
-      onClickDocument(Number(id));
       dispatchRouteEvent(`/documents/${id}`);
     }
 
     if (target.matches('.add-root-button-title')) {
-      const { id } = await addDocument();
-      this.setState();
-      onClickDocument(Number(id));
-      dispatchRouteEvent(`/documents/${id}`);
+      addDocument();
       return;
     }
 
     if (target.matches('.fa-plus')) {
-      const $li = target.closest('li');
-      const { id: parentId } = $li.dataset;
-      const { id } = await addDocument(Number(parentId));
-      this.setState();
-      onClickDocument(Number(id));
-      dispatchRouteEvent(`/documents/${id}`);
-
+      const { id: parentId } = target.closest('li').dataset;
+      addDocument(Number(parentId));
       return;
     }
 
     if (target.matches('.fa-trash')) {
-      if (!confirm('정말 해당 문서를 삭제하시겠습니까?')) return;
-      const $li = target.closest('li');
-      const { id } = $li.dataset;
-      await deleteDocument(Number(id));
-      this.setState();
-      onUpdateEditor();
-      dispatchRouteEvent(`/`);
+      const { id } = target.closest('li').dataset;
+      deleteDocument(id);
       return;
     }
 
     if (target.matches('.fa-caret-right')) {
       const $moreButton = target.closest('.more-button');
-      $moreButton.classList.toggle('clicked');
       const $documentList = target.closest('.document-list');
+      $moreButton.classList.toggle('clicked');
       toggleChildDocumentLists($documentList);
     }
   });
 
-  const toggleChildDocumentLists = function recur($documentList) {
+  const addDocument = async (parentId = null) => {
+    const title = prompt('새로 추가할 문서의 제목을 작성해주세요.');
+
+    if (title === null) {
+      return;
+    }
+
+    const document = {
+      parent: parentId,
+      title: title.trim() !== '' ? title.trim() : '제목없음',
+    };
+    const { id } = await API.addDocument(document);
+
+    dispatchRouteEvent(`/documents/${id}`);
+  };
+
+  const deleteDocument = async id => {
+    if (!confirm('정말 해당 문서를 삭제하시겠습니까?')) return;
+    await API.deleteDocument(id);
+    dispatchRouteEvent(`/`);
+  };
+
+  const toggleChildDocumentLists = $documentList => {
     const childDocumentLists = [...$documentList.children].filter($node =>
       $node.matches('.document-list')
     );
+
     childDocumentLists.forEach($documentList =>
       $documentList.classList.toggle('hide')
     );
@@ -117,23 +126,6 @@ export default function Navbar({
           .join('')}
       </ul>
     `;
-  };
-
-  const addDocument = async (id = null) => {
-    const title = prompt('새로 추가할 문서의 제목을 작성해주세요.').trim();
-
-    if (title === null) return;
-
-    const document = {
-      parent: id,
-      title: title !== '' ? title : '제목없음',
-    };
-
-    return await API.addDocument(document);
-  };
-
-  const deleteDocument = async id => {
-    await API.deleteDocument(id);
   };
 
   this.setState = async () => {

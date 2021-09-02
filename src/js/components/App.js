@@ -9,7 +9,7 @@ import { catchRouteEvent } from '../utils/router.js';
 export default function App({ $target, initialState }) {
   this.state = initialState;
 
-  const handleClickDocument = async id => {
+  const handleUpdateEditor = async id => {
     const document = await API.getDocument(id);
     editor.setState(document);
   };
@@ -25,8 +25,8 @@ export default function App({ $target, initialState }) {
 
   const navbar = new Navbar({
     $target,
-    onClickDocument: handleClickDocument,
-    onUpdateEditor: handleResetEditor,
+    onUpdateEditor: handleUpdateEditor,
+    onResetEditor: handleResetEditor,
   });
 
   const editor = new Editor({
@@ -38,7 +38,6 @@ export default function App({ $target, initialState }) {
 
   this.render = async () => {
     const { pathname } = location;
-
     navbar.setState();
 
     if (pathname === '/') {
@@ -51,5 +50,5 @@ export default function App({ $target, initialState }) {
   };
 
   this.render();
-  catchRouteEvent(() => editor.setState(document));
+  catchRouteEvent(() => this.render());
 }
