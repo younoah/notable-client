@@ -94,11 +94,13 @@ export default function Navbar({
   };
 
   this.setState = async () => {
+    console.log('네비바 렌더링');
     this.state = await API.getRootDocuments();
     this.render();
   };
 
   this.render = async () => {
+    console.log('네비바 렌더링');
     $navbar.innerHTML = /* html */ `
       <div class="navbar__user">
         <img class="logo-image" src="/src/images/image.ico" alt="로고" />

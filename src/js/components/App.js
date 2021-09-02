@@ -35,9 +35,9 @@ export default function App({ $target, initialState }) {
   this.setState = () => {};
 
   this.render = async () => {
-    navbar.setState();
-
     const { pathname } = location;
+
+    navbar.setState();
 
     if (pathname === '/') {
       editor.setState({});
