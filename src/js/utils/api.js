@@ -1,24 +1,37 @@
 'use strict';
 
 const BASE_URL = 'https://kdt.roto.codes';
+const USER_NAME = 'younoah';
 
 const option = {
   get: () => ({
-    headers: { 'Content-Type': 'application/json', 'x-username': 'younoah' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-username': `${USER_NAME}`,
+    },
   }),
   post: contents => ({
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-username': 'younoah' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-username': `${USER_NAME}`,
+    },
     body: JSON.stringify(contents),
   }),
   put: contents => ({
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'x-username': 'younoah' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-username': `${USER_NAME}`,
+    },
     body: JSON.stringify(contents),
   }),
   delete: () => ({
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json', 'x-username': 'younoah' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-username': `${USER_NAME}`,
+    },
   }),
 };
 

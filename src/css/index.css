@@ -66,8 +66,13 @@ body {
   margin: 5px;
 }
 
+.navbar__list {
+  padding-left: 20px;
+}
+
 .navbar__list__document {
   cursor: pointer;
+  list-style: none;
 }
 
 .document-title {
@@ -75,6 +80,10 @@ body {
 }
 
 .document-title:hover {
+  background-color: var(--color-dark-white);
+}
+
+.document-title.clicked {
   background-color: var(--color-dark-white);
 }
 
@@ -114,4 +123,7 @@ body {
 
 .editor__content {
   height: 500px;
+}
+
+@media screen and (min-width: 768px) {
 }

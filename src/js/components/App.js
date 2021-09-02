@@ -40,7 +40,6 @@ export default function App({ $target, initialState }) {
     const { pathname } = location;
 
     if (pathname === '/') {
-      console.log('루트!!');
       editor.setState({});
     } else if (pathname.indexOf('/documents/') === 0) {
       const [, , id] = pathname.split('/');
@@ -50,5 +49,5 @@ export default function App({ $target, initialState }) {
   };
 
   this.render();
-  catchRouteEvent(() => this.render());
+  catchRouteEvent(() => editor.setState(document));
 }

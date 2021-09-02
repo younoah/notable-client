@@ -9,7 +9,9 @@ export const dispatchRouteEvent = nextUrl => {
 export const catchRouteEvent = onRoute => {
   window.addEventListener(ROUTE_CHANGE_EVENT_NAME, e => {
     const { nextUrl } = e.detail;
+    const { pathname: currUrl } = location;
 
+    if (currUrl === nextUrl) return;
     if (!nextUrl) return;
 
     history.pushState(null, null, nextUrl);
