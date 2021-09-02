@@ -82,10 +82,12 @@ main {
 
 .logo i {
   color: var(--blue-color);
+  cursor: pointer;
 }
 
 .logo-title {
   margin-left: var(--padding);
+  cursor: pointer;
 }
 
 .hide-button {

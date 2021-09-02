@@ -17,7 +17,7 @@ export default function Navbar({
   $target.append($navbar);
   $navbar.addEventListener('click', async ({ target }) => {
     console.log('target: ', target);
-    if (target.matches('.logo-image')) {
+    if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
       dispatchRouteEvent(`/`);
       return;
     }
