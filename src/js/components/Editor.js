@@ -6,7 +6,7 @@ import { API } from '../utils/api.js';
 export default function Editor({
   $target,
   initialState = {},
-  onUpdateDocumentList,
+  onUpdateDocumentTitle,
 }) {
   let timer = null;
   const $editor = document.createElement('section');
@@ -18,12 +18,20 @@ export default function Editor({
       clearTimeout(timer);
     }
 
+    let titleChangedFlag = false;
     const id = this.state.id;
     const title = $('.editor__header', $editor).innerText.trim();
     const content = $('.editor__content', $editor).innerText.trim();
 
+    if (target.matches('.editor__header')) {
+      titleChangedFlag = true;
+    }
+
     timer = setTimeout(() => {
       updateDocument(id, title, content);
+      if (titleChangedFlag) {
+        onUpdateDocumentTitle(id, title);
+      }
     }, 2000);
   });
 
@@ -33,7 +41,6 @@ export default function Editor({
       content,
     };
     await API.updateDocument(id, document);
-    onUpdateDocumentList();
   };
 
   this.state = initialState;

@@ -16,7 +16,6 @@ export default function Navbar({
 
   $target.append($navbar);
   $navbar.addEventListener('click', async ({ target }) => {
-    console.log(target);
     if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
       dispatchRouteEvent(`/`);
       return;
@@ -138,13 +137,11 @@ export default function Navbar({
   };
 
   this.setState = async () => {
-    console.log('navbar - setState');
     this.state = await API.getRootDocuments();
     this.render();
   };
 
   this.render = async () => {
-    console.log('navbar - render');
     $navbar.innerHTML = /* html */ `
       <header class="sidebar__header">
         <div class="logo">

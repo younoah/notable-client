@@ -2,6 +2,7 @@
 
 import Navbar from './Navbar.js';
 import Editor from './Editor.js';
+import { $ } from '../utils/dom.js';
 import { API } from '../utils/api.js';
 import { catchRouteEvent } from '../utils/router.js';
 
@@ -13,8 +14,9 @@ export default function App({ $target, initialState }) {
     editor.setState(document);
   };
 
-  const handleUpdateDocumentList = () => {
-    navbar.setState();
+  const handleUpdateDocumentTitle = (targetId, newTitle) => {
+    const $documentTittle = $('.document-title', $(`[data-id="${targetId}"]`));
+    $documentTittle.innerText = newTitle;
   };
 
   const handleResetEditor = () => {
@@ -29,7 +31,7 @@ export default function App({ $target, initialState }) {
 
   const editor = new Editor({
     $target,
-    onUpdateDocumentList: handleUpdateDocumentList,
+    onUpdateDocumentTitle: handleUpdateDocumentTitle,
   });
 
   this.setState = () => {};
