@@ -4,18 +4,13 @@ import { $ } from '../utils/dom.js';
 import { API } from '../utils/api.js';
 import { dispatchRouteEvent } from '../utils/router.js';
 
-export default function Navbar({
-  $target,
-  initialState,
-  onUpdateEditor,
-  onResetEditor,
-}) {
+export default function Sidebar({ $target, initialState }) {
   this.state = initialState;
-  const $navbar = document.createElement('nav');
-  $navbar.id = 'sidebar';
+  const $sidebar = document.createElement('nav');
+  $sidebar.id = 'sidebar';
 
-  $target.append($navbar);
-  $navbar.addEventListener('click', async ({ target }) => {
+  $target.append($sidebar);
+  $sidebar.addEventListener('click', async ({ target }) => {
     if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
       dispatchRouteEvent(`/`);
       return;
@@ -134,7 +129,7 @@ export default function Navbar({
   };
 
   this.render = async () => {
-    $navbar.innerHTML = /* html */ `
+    $sidebar.innerHTML = /* html */ `
       <header class="sidebar__header">
         <div class="logo">
           <i class="fab fa-accusoft"></i>

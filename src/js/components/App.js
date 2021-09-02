@@ -1,6 +1,6 @@
 'use strict';
 
-import Navbar from './Navbar.js';
+import Sidebar from './Sidebar.js';
 import Editor from './Editor.js';
 import { $ } from '../utils/dom.js';
 import { API } from '../utils/api.js';
@@ -9,24 +9,13 @@ import { catchRouteEvent } from '../utils/router.js';
 export default function App({ $target, initialState }) {
   this.state = initialState;
 
-  const handleUpdateEditor = async id => {
-    const document = await API.getDocument(id);
-    editor.setState(document);
-  };
-
   const handleUpdateDocumentTitle = (targetId, newTitle) => {
     const $documentTittle = $('.document-title', $(`[data-id="${targetId}"]`));
     $documentTittle.innerText = newTitle;
   };
 
-  const handleResetEditor = () => {
-    editor.setState({});
-  };
-
-  const navbar = new Navbar({
+  const sidebar = new Sidebar({
     $target,
-    onUpdateEditor: handleUpdateEditor,
-    onResetEditor: handleResetEditor,
   });
 
   const editor = new Editor({
@@ -34,11 +23,9 @@ export default function App({ $target, initialState }) {
     onUpdateDocumentTitle: handleUpdateDocumentTitle,
   });
 
-  this.setState = () => {};
-
   this.render = async () => {
     const { pathname } = location;
-    navbar.setState();
+    sidebar.setState();
 
     if (pathname === '/') {
       editor.setState({});
