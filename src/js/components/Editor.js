@@ -3,45 +3,29 @@
 import { $ } from '../utils/dom.js';
 import { API } from '../utils/api.js';
 
-export default function Editor({
-  $target,
-  initialState = {},
-  onUpdateDocumentTitle,
-}) {
-  let timer = null;
+export default function Editor({ $target, initialState = {} }) {
+  let debounceTimer = null;
   const $editor = document.createElement('section');
   $editor.id = 'editor';
   $target.append($editor);
 
   $editor.addEventListener('keyup', ({ target }) => {
-    if (timer !== null) {
-      clearTimeout(timer);
+    if (debounceTimer !== null) {
+      clearTimeout(debounceTimer);
     }
 
-    let titleChangedFlag = false;
     const id = this.state.id;
     const title = $('.editor__header', $editor).innerText.trim();
     const content = $('.editor__content', $editor).innerText.trim();
 
-    if (target.matches('.editor__header')) {
-      titleChangedFlag = true;
-    }
-
-    timer = setTimeout(() => {
-      updateDocument(id, title, content);
-      if (titleChangedFlag) {
-        onUpdateDocumentTitle(id, title);
-      }
+    debounceTimer = setTimeout(async () => {
+      const document = {
+        title,
+        content,
+      };
+      await API.updateDocument(id, document);
     }, 2000);
   });
-
-  const updateDocument = async (id, title, content) => {
-    const document = {
-      title,
-      content,
-    };
-    await API.updateDocument(id, document);
-  };
 
   this.state = initialState;
 

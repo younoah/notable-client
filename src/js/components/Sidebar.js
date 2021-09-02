@@ -5,11 +5,11 @@ import { API } from '../utils/api.js';
 import { dispatchRouteEvent } from '../utils/router.js';
 
 export default function Sidebar({ $target, initialState }) {
-  this.state = initialState;
   const $sidebar = document.createElement('nav');
   $sidebar.id = 'sidebar';
-
   $target.append($sidebar);
+  this.state = initialState;
+
   $sidebar.addEventListener('click', async ({ target }) => {
     if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
       dispatchRouteEvent(`/`);
@@ -27,6 +27,7 @@ export default function Sidebar({ $target, initialState }) {
       $targetDocumentContainer.classList.toggle('clicked');
 
       dispatchRouteEvent(`/documents/${id}`);
+      return;
     }
 
     if (target.matches('.add-root-button-title')) {
@@ -86,10 +87,9 @@ export default function Sidebar({ $target, initialState }) {
     );
   };
 
-  const renderDocumentList = function recur(document, i, childrenLength) {
-    i++;
+  const renderDocumentList = function recur(document, childrenLength, isRoot) {
     return /* html */ `
-      <ul class="document-list ${i > 1 ? 'hide' : ''}">
+      <ul class="document-list ${isRoot ? '' : 'hide'}">
         <li data-id=${document.id} class="document-item">
           <div class="document-container">
             ${
@@ -101,7 +101,7 @@ export default function Sidebar({ $target, initialState }) {
             `
                 : /* html */ `
                   <span class="dot">
-                  <i class="fas fa-genderless"></i>
+                    <i class="fas fa-genderless"></i>
                   </span>
                 `
             }
@@ -117,7 +117,7 @@ export default function Sidebar({ $target, initialState }) {
           </div>
         </li>
         ${document.documents
-          .map(document => recur(document, i, document.documents.length))
+          .map(document => recur(document, document.documents.length, false))
           .join('')}
       </ul>
     `;
@@ -148,7 +148,7 @@ export default function Sidebar({ $target, initialState }) {
       <div class="sidebar__document-list-container">
         ${this.state
           .map(document =>
-            renderDocumentList(document, 0, document.documents.length)
+            renderDocumentList(document, document.documents.length, true)
           )
           .join('')}
       <div>
