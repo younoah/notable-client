@@ -66,17 +66,39 @@ export default function Navbar({
     if (target.matches('.fa-caret-right')) {
       const $moreButton = target.closest('.more-button');
       $moreButton.classList.toggle('clicked');
+      const $documentList = target.closest('.document-list');
+      toggleChildDocumentLists($documentList);
     }
   });
 
-  const renderDocumentList = function recur(document) {
+  const toggleChildDocumentLists = function recur($documentList) {
+    const childDocumentLists = [...$documentList.children].filter($node =>
+      $node.matches('.document-list')
+    );
+    childDocumentLists.forEach($documentList =>
+      $documentList.classList.toggle('hide')
+    );
+  };
+
+  const renderDocumentList = function recur(document, i, childrenLength) {
+    i++;
     return /* html */ `
-      <ul class="document-list">
+      <ul class="document-list ${i > 1 ? 'hide' : ''}">
         <li data-id=${document.id} class="document-item">
           <div class="document-container">
-            <button class="more-button">
-              <i class="fas fa-caret-right"></i>
-            </button>
+            ${
+              childrenLength > 0
+                ? /* html */ `
+              <button class="more-button">
+                <i class="fas fa-caret-right"></i>
+              </button>
+            `
+                : /* html */ `
+                  <span class="dot">
+                  <i class="fas fa-genderless"></i>
+                  </span>
+                `
+            }
             <span class="document-title">${document.title}</span>
           </div>
           <div class="document-buttons">
@@ -88,7 +110,9 @@ export default function Navbar({
             </button>
           </div>
         </li>
-        ${document.documents.map(document => recur(document)).join('')}
+        ${document.documents
+          .map(document => recur(document, i, document.documents.length))
+          .join('')}
       </ul>
     `;
   };
@@ -135,7 +159,11 @@ export default function Navbar({
         </button>
       </div>
       <div class="sidebar__document-list-container">
-        ${this.state.map(document => renderDocumentList(document)).join('')}
+        ${this.state
+          .map(document =>
+            renderDocumentList(document, 0, document.documents.length)
+          )
+          .join('')}
       <div>
     `;
   };

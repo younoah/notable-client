@@ -66,6 +66,7 @@ main {
   background-color: var(--grey-light-color);
   width: 20%;
   min-width: 300px;
+  max-width: 100%;
   height: 100%;
 }
 
@@ -117,12 +118,14 @@ main {
 .sidebar__document-list-container {
   margin: var(--padding) var(--padding) var(--padding) 0;
   height: 90vh;
+  /* max-width: 100%; */
   overflow-y: auto;
   overflow-x: auto;
 }
 
 .document-list {
   margin: var(--padding) 0 var(--padding) calc(var(--padding) * 2);
+  /* max-width: 100%; */
 }
 
 .document-list.hide {
@@ -155,12 +158,28 @@ main {
 }
 
 .document-container {
+  display: flex;
+  /* align-items: center; */
   padding: 0 var(--padding);
 }
 
 .document-container:hover {
   background-color: var(--light-blue-color);
   border-radius: 4px;
+}
+
+.dot {
+  font-size: 2px;
+  margin: auto 3px;
+}
+
+.document-container .fa-genderless {
+  color: var(--grey-dark-color);
+  margin: auto 3px;
+}
+
+.document-buttons {
+  display: flex;
 }
 
 .add-button,
