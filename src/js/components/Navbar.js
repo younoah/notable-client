@@ -12,10 +12,11 @@ export default function Navbar({
 }) {
   this.state = initialState;
   const $navbar = document.createElement('nav');
-  $navbar.className = 'navbar';
+  $navbar.id = 'sidebar';
 
   $target.append($navbar);
   $navbar.addEventListener('click', async ({ target }) => {
+    console.log('target: ', target);
     if (target.matches('.logo-image')) {
       dispatchRouteEvent(`/`);
       return;
@@ -32,7 +33,7 @@ export default function Navbar({
       dispatchRouteEvent(`/documents/${id}`);
     }
 
-    if (target.matches('.add-root-document-button')) {
+    if (target.matches('.add-root-button-title')) {
       const { id } = await addDocument();
       this.setState();
       onClickDocument(Number(id));
@@ -40,7 +41,7 @@ export default function Navbar({
       return;
     }
 
-    if (target.matches('.add-document-button')) {
+    if (target.matches('.fa-plus')) {
       const $li = target.closest('li');
       const { id: parentId } = $li.dataset;
       const { id } = await addDocument(Number(parentId));
@@ -51,7 +52,7 @@ export default function Navbar({
       return;
     }
 
-    if (target.matches('.delete-document-button')) {
+    if (target.matches('.fa-trash')) {
       if (!confirm('정말 해당 문서를 삭제하시겠습니까?')) return;
       const $li = target.closest('li');
       const { id } = $li.dataset;
@@ -65,11 +66,22 @@ export default function Navbar({
 
   const renderDocumentList = function recur(document) {
     return /* html */ `
-      <ul class="navbar__list">
-        <li data-id="${document.id}" class="navbar__list__document">
-          <span class="document-title">${document.title}</span>
-          <button class="add-document-button">추가</button
-          ><button class="delete-document-button">삭제</button>
+      <ul class="document-list">
+        <li data-id=${document.id} class="document-item">
+          <div class="document-container">
+            <button class="more-button">
+              <i class="fas fa-caret-right"></i>
+            </button>
+            <span class="document-title">${document.title}</span>
+          </div>
+          <div class="document-buttons">
+            <button class="add-button">
+              <i class="fas fa-plus"></i>
+            </button>
+            <button class="delete-button">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </li>
         ${document.documents.map(document => recur(document)).join('')}
       </ul>
@@ -102,14 +114,24 @@ export default function Navbar({
   this.render = async () => {
     console.log('네비바 렌더링');
     $navbar.innerHTML = /* html */ `
-      <div class="navbar__user">
-        <img class="logo-image" src="/src/images/image.ico" alt="로고" />
-        <h3 id="user-title">유저이름</h3>
+      <header class="sidebar__header">
+        <div class="logo">
+          <i class="fab fa-accusoft"></i>
+          <span class="logo-title">Notable</span>
+        </div>
+        <button class="hide-button">
+          <i class="fas fa-bars"></i>
+        </button>
+      </header>
+      <div class="sidebar__add-button">
+        <button class="add-root-button">
+          <i class="fas fa-plus"></i>
+          <span class="add-root-button-title">New Document</span>
+        </button>
       </div>
-      <div class="navbar__btn-add">
-          <button class="add-root-document-button">Add</button>
-      </div>
-      ${this.state.map(document => renderDocumentList(document)).join('')}
+      <div class="sidebar__document-list-container">
+        ${this.state.map(document => renderDocumentList(document)).join('')}
+      <div>
     `;
   };
 }

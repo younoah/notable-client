@@ -9,8 +9,8 @@ export default function Editor({
   onUpdateDocumentList,
 }) {
   let timer = null;
-  const $editor = document.createElement('div');
-  $editor.className = 'editor';
+  const $editor = document.createElement('section');
+  $editor.id = 'editor';
   $target.append($editor);
 
   $editor.addEventListener('keyup', ({ target }) => {
@@ -19,7 +19,7 @@ export default function Editor({
     }
 
     const id = this.state.id;
-    const title = $('.editor__title', $editor).innerText.trim();
+    const title = $('.editor__header', $editor).innerText.trim();
     const content = $('.editor__content', $editor).innerText.trim();
 
     timer = setTimeout(() => {
@@ -50,12 +50,9 @@ export default function Editor({
     }
 
     $editor.innerHTML = /* html */ `
-    <div class="editor__title-container">
-      <h1 class="editor__title" contenteditable="true">${this.state.title}</h1>
-      <div class="editor__line"></div>
-    </div>
-    <div class="editor__content-container" >
-      <div class="editor__content" contenteditable="true">${
+    <div class="editor-container">
+      <h1 contenteditable="true" class="editor__header">${this.state.title}</h1>
+      <div contenteditable="true" class="editor__content">${
         this.state.content || ''
       }</div>
     </div>
