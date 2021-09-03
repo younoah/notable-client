@@ -6,8 +6,9 @@ import { API } from '../utils/api.js';
 export default function Editor({ $target, initialState = {} }) {
   let debounceTimer = null;
   const $editor = document.createElement('section');
+  const $fragment = document.createDocumentFragment();
   $editor.id = 'editor';
-  $target.append($editor);
+  $fragment.append($editor);
 
   $editor.addEventListener('keyup', ({ target }) => {
     if (debounceTimer !== null) {
@@ -30,24 +31,29 @@ export default function Editor({ $target, initialState = {} }) {
   this.state = initialState;
 
   this.setState = nextState => {
+    console.log('2');
     this.state = nextState;
     this.render();
   };
 
   this.render = () => {
+    console.log('3');
     if (Object.keys(this.state).length <= 0) {
       $editor.innerHTML = /* html */ `<h1>나만의 작은 문서공간!</h1>`;
       return;
     }
 
     $editor.innerHTML = /* html */ `
-    <div class="editor-container">
-      <h1 contenteditable="true" class="editor__header">${this.state.title}</h1>
-      <div contenteditable="true" class="editor__content">${
-        this.state.content || ''
-      }</div>
-    </div>
-    <div class="content-bottom"></div>
-  `;
+      <div class="editor-container">
+        <h1 contenteditable="true" class="editor__header">${
+          this.state.title
+        }</h1>
+        <div contenteditable="true" class="editor__content">${
+          this.state.content || ''
+        }</div>
+      </div>
+      <div class="content-bottom"></div>
+    `;
+    $target.append($fragment);
   };
 }

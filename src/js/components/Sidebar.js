@@ -6,8 +6,9 @@ import { dispatchRouteEvent } from '../utils/router.js';
 
 export default function Sidebar({ $target, initialState = [] }) {
   const $sidebar = document.createElement('nav');
+  const $fragment = document.createDocumentFragment();
   $sidebar.id = 'sidebar';
-  $target.append($sidebar);
+  $fragment.append($sidebar);
   this.state = initialState;
 
   $sidebar.addEventListener('click', async ({ target }) => {
@@ -157,5 +158,6 @@ export default function Sidebar({ $target, initialState = [] }) {
           .join('')}
       <div>
     `;
+    $target.append($fragment);
   };
 }

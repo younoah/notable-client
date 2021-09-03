@@ -1,9 +1,9 @@
 'use strict';
 
-import Sidebar from './Sidebar.js';
-import Editor from './Editor.js';
-import { API } from '../utils/api.js';
-import { catchRouteEvent } from '../utils/router.js';
+import Sidebar from './components/Sidebar.js';
+import Editor from './components/Editor.js';
+import { API } from './utils/api.js';
+import { catchRouteEvent } from './utils/router.js';
 
 export default function App({ $target }) {
   const sidebar = new Sidebar({
@@ -20,6 +20,7 @@ export default function App({ $target }) {
     sidebar.setState();
 
     if (pathname === '/') {
+      console.log('1');
       editor.setState({});
     } else if (pathname.indexOf('/documents/') === 0) {
       const [, , id] = pathname.split('/');

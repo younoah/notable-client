@@ -1,6 +1,6 @@
 'use strict';
 import { $ } from './utils/dom.js';
-import App from './components/App.js';
+import App from './App.js';
 
 const navbarDummy = [
   {
