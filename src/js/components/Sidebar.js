@@ -6,9 +6,8 @@ import { dispatchRouteEvent } from '../utils/router.js';
 
 export default function Sidebar({ $target, initialState = [] }) {
   const $sidebar = document.createElement('nav');
-  const $fragment = document.createDocumentFragment();
   $sidebar.id = 'sidebar';
-  $fragment.append($sidebar);
+  $target.append($sidebar);
   this.state = initialState;
 
   $sidebar.addEventListener('click', async ({ target }) => {
@@ -127,9 +126,8 @@ export default function Sidebar({ $target, initialState = [] }) {
   };
 
   this.setState = async () => {
+    console.log('사이드바 렌더링!');
     this.state = await API.getRootDocuments();
-    console.log('state: ');
-
     this.render();
   };
 
@@ -158,6 +156,5 @@ export default function Sidebar({ $target, initialState = [] }) {
           .join('')}
       <div>
     `;
-    $target.append($fragment);
   };
 }
