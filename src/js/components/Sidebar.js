@@ -126,7 +126,6 @@ export default function Sidebar({ $target, initialState = [] }) {
   };
 
   this.setState = async () => {
-    console.log('사이드바 렌더링!');
     this.state = await API.getRootDocuments();
     this.render();
   };

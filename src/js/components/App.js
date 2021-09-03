@@ -15,7 +15,6 @@ export default function App({ $target }) {
   });
 
   const routeEditor = async () => {
-    console.log('에디터 라우트!');
     const { pathname } = location;
     const [, , id] = pathname.split('/');
     const document = await API.getDocument(id);
@@ -23,7 +22,6 @@ export default function App({ $target }) {
   };
 
   this.route = async () => {
-    console.log('라우트!');
     const { pathname } = location;
 
     sidebar.setState();

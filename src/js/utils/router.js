@@ -8,7 +8,6 @@ export const dispatchRouteEvent = nextUrl => {
 
 export const catchRouteEvent = onRoute => {
   window.addEventListener(ROUTE_CHANGE_EVENT_NAME, e => {
-    console.log('캐치!');
     const { nextUrl } = e.detail;
     // const { pathname: currUrl } = location;
 
