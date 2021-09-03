@@ -133,11 +133,12 @@ export default function Sidebar({ $target, initialState = [], renderEditor }) {
   };
 
   this.setState = async () => {
-    this.state = await API.getRootDocuments();
+    // this.state = await API.getRootDocuments();
     this.render();
   };
 
   this.render = async () => {
+    console.log('sidebar render', this.state);
     $sidebar.innerHTML = /* html */ `
       <header class="sidebar__header">
         <div class="logo">
