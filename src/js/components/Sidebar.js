@@ -4,7 +4,7 @@ import { $ } from '../utils/dom.js';
 import { API } from '../utils/api.js';
 import { dispatchRouteEvent } from '../utils/router.js';
 
-export default function Sidebar({ $target, initialState = [] }) {
+export default function Sidebar({ $target, initialState = [], renderEditor }) {
   const $sidebar = document.createElement('nav');
   $sidebar.id = 'sidebar';
   $target.append($sidebar);
@@ -26,7 +26,7 @@ export default function Sidebar({ $target, initialState = [] }) {
       }
       $targetDocumentContainer.classList.toggle('clicked');
 
-      dispatchRouteEvent(`/documents/${id}`);
+      renderEditor(Number(id));
       return;
     }
 

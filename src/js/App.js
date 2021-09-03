@@ -6,8 +6,14 @@ import { API } from './utils/api.js';
 import { catchRouteEvent } from './utils/router.js';
 
 export default function App({ $target }) {
+  const renderEditor = async id => {
+    const document = await API.getDocument(id);
+    editor.setState(document);
+  };
+
   const sidebar = new Sidebar({
     $target,
+    renderEditor,
   });
 
   const editor = new Editor({
@@ -20,7 +26,6 @@ export default function App({ $target }) {
     sidebar.setState();
 
     if (pathname === '/') {
-      console.log('1');
       editor.setState({});
     } else if (pathname.indexOf('/documents/') === 0) {
       const [, , id] = pathname.split('/');
