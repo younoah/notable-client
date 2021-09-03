@@ -185,6 +185,13 @@ main {
   margin: auto 3px;
 }
 
+.document-title {
+  width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .document-buttons {
   display: flex;
 }
