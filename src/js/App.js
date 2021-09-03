@@ -5,10 +5,16 @@ import Editor from './components/Editor.js';
 import { API } from './utils/api.js';
 import { catchRouteEvent } from './utils/router.js';
 
-export default function App({ $target }) {
+export default function App({ $target, initialState = {} }) {
+  this.state = initialState;
+
   const renderEditor = async id => {
-    const document = await API.getDocument(id);
-    editor.setState(document);
+    if (id) {
+      const document = await API.getDocument(id);
+      editor.setState(document);
+    } else {
+      editor.setState({});
+    }
   };
 
   const sidebar = new Sidebar({

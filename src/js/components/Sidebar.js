@@ -11,12 +11,14 @@ export default function Sidebar({ $target, initialState = [], renderEditor }) {
   this.state = initialState;
 
   $sidebar.addEventListener('click', async ({ target }) => {
+    // 사이드바가 리렌더링 x
     if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
-      dispatchRouteEvent(`/`);
+      renderEditor();
       return;
     }
 
     if (target.matches('.document-title')) {
+      // 사이드바가 리렌더링 x
       const { id } = target.closest('li').dataset;
       const $clickedDocumentContainer = $('.document-container.clicked ');
       const $targetDocumentContainer = target.closest('.document-container');
@@ -30,28 +32,33 @@ export default function Sidebar({ $target, initialState = [], renderEditor }) {
       return;
     }
 
+    if (target.matches('.fa-caret-right')) {
+      // 사이드바가 리렌더링 x
+      const $moreButton = target.closest('.more-button');
+      const $documentList = target.closest('.document-list');
+      $moreButton.classList.toggle('clicked');
+      toggleChildDocumentLists($documentList);
+      return;
+    }
+
     if (target.matches('.add-root-button-title')) {
+      // 사이드바가 리렌더링 o
       addDocument();
       return;
     }
 
     if (target.matches('.fa-plus')) {
+      // 사이드바가 리렌더링 o
       const { id: parentId } = target.closest('li').dataset;
       addDocument(Number(parentId));
       return;
     }
 
     if (target.matches('.fa-trash')) {
+      // 사이드바가 리렌더링 o
       const { id } = target.closest('li').dataset;
       deleteDocument(id);
       return;
-    }
-
-    if (target.matches('.fa-caret-right')) {
-      const $moreButton = target.closest('.more-button');
-      const $documentList = target.closest('.document-list');
-      $moreButton.classList.toggle('clicked');
-      toggleChildDocumentLists($documentList);
     }
   });
 
