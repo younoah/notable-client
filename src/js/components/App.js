@@ -5,9 +5,7 @@ import Editor from './Editor.js';
 import { API } from '../utils/api.js';
 import { catchRouteEvent } from '../utils/router.js';
 
-export default function App({ $target, initialState }) {
-  this.state = initialState;
-
+export default function App({ $target }) {
   const sidebar = new Sidebar({
     $target,
   });
@@ -16,8 +14,9 @@ export default function App({ $target, initialState }) {
     $target,
   });
 
-  this.render = async () => {
+  this.route = async () => {
     const { pathname } = location;
+
     sidebar.setState();
 
     if (pathname === '/') {
@@ -29,6 +28,6 @@ export default function App({ $target, initialState }) {
     }
   };
 
-  this.render();
-  catchRouteEvent(() => this.render());
+  this.route();
+  catchRouteEvent(() => this.route());
 }

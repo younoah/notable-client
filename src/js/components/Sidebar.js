@@ -4,7 +4,7 @@ import { $ } from '../utils/dom.js';
 import { API } from '../utils/api.js';
 import { dispatchRouteEvent } from '../utils/router.js';
 
-export default function Sidebar({ $target, initialState }) {
+export default function Sidebar({ $target, initialState = [] }) {
   const $sidebar = document.createElement('nav');
   $sidebar.id = 'sidebar';
   $target.append($sidebar);
@@ -87,7 +87,7 @@ export default function Sidebar({ $target, initialState }) {
     );
   };
 
-  const renderDocumentList = function recur(document, childrenLength, isRoot) {
+  const renderDocumentList = (document, childrenLength, isRoot) => {
     return /* html */ `
       <ul class="document-list ${isRoot ? '' : 'hide'}">
         <li data-id=${document.id} class="document-item">
@@ -117,7 +117,9 @@ export default function Sidebar({ $target, initialState }) {
           </div>
         </li>
         ${document.documents
-          .map(document => recur(document, document.documents.length, false))
+          .map(document =>
+            renderDocumentList(document, document.documents.length, false)
+          )
           .join('')}
       </ul>
     `;
@@ -125,6 +127,8 @@ export default function Sidebar({ $target, initialState }) {
 
   this.setState = async () => {
     this.state = await API.getRootDocuments();
+    console.log('state: ');
+
     this.render();
   };
 
