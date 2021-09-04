@@ -19,8 +19,8 @@ export default function App({ $target }) {
     };
     await API.updateDocument(id, document);
     setRootDocuments();
-    setCurrDocument(id); // 낙관적 업데이트시 삭제 해도 될 듯
-  }; // for editor
+    setCurrDocument(id);
+  };
 
   const handleDeleteDocument = async id => {
     await API.deleteDocument(id);

@@ -20,8 +20,6 @@ export default function Sidebar({
     this.toggledDocuments = [];
   };
 
-  initState();
-
   this.setState = ({
     nextRootDocuments = this.rootDocuments,
     nextCurrDocumentId = this.currDocumentId,
@@ -42,50 +40,6 @@ export default function Sidebar({
 
     this.render();
   };
-
-  $sidebar.addEventListener('click', async ({ target }) => {
-    // 사이드바가 리렌더링 x
-    if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
-      onClickLogo();
-      return;
-    }
-
-    if (target.matches('.document-title')) {
-      // 사이드바가 리렌더링 x
-      const { id } = target.closest('li').dataset;
-      onClickDocument(Number(id));
-      return;
-    }
-
-    if (target.matches('.fa-caret-right')) {
-      const $moreButton = target.closest('.more-button');
-      $moreButton.matches('.clicked')
-        ? openDocument(target)
-        : closeDocument(target);
-      return;
-    }
-
-    if (target.matches('.add-root-button-title')) {
-      // 사이드바가 리렌더링 o
-      addDocument();
-      return;
-    }
-
-    if (target.matches('.fa-plus')) {
-      // 사이드바가 리렌더링 o
-      const { id: parentId } = target.closest('li').dataset;
-      addDocument(Number(parentId));
-      return;
-    }
-
-    if (target.matches('.fa-trash')) {
-      // 사이드바가 리렌더링 o
-      if (!confirm('정말 해당 문서를 삭제하시겠습니까?')) return;
-      const { id } = target.closest('li').dataset;
-      onDeleteDocument(Number(id));
-      return;
-    }
-  });
 
   const getChildDocumentsById = id => {
     const document = findDocument(id);
@@ -153,6 +107,7 @@ export default function Sidebar({
 
   const renderDocumentList = (document, childrenLength) => {
     const { id, title } = document;
+
     return /* html */ `
       <ul class="document-list ${
         this.openedDocuments.includes(id) ? '' : 'hide'
@@ -197,7 +152,6 @@ export default function Sidebar({
   };
 
   this.render = async () => {
-    console.log('사이드바 렌더');
     $sidebar.innerHTML = /* html */ `
       <header class="sidebar__header">
         <div class="logo">
@@ -223,4 +177,45 @@ export default function Sidebar({
       <div>
     `;
   };
+
+  $sidebar.addEventListener('click', async ({ target }) => {
+    if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
+      onClickLogo();
+      return;
+    }
+
+    if (target.matches('.document-title')) {
+      const { id } = target.closest('li').dataset;
+      onClickDocument(Number(id));
+      return;
+    }
+
+    if (target.matches('.fa-caret-right')) {
+      const $moreButton = target.closest('.more-button');
+      $moreButton.matches('.clicked')
+        ? openDocument(target)
+        : closeDocument(target);
+      return;
+    }
+
+    if (target.matches('.add-root-button-title')) {
+      addDocument();
+      return;
+    }
+
+    if (target.matches('.fa-plus')) {
+      const { id: parentId } = target.closest('li').dataset;
+      addDocument(Number(parentId));
+      return;
+    }
+
+    if (target.matches('.fa-trash')) {
+      if (!confirm('정말 해당 문서를 삭제하시겠습니까?')) return;
+      const { id } = target.closest('li').dataset;
+      onDeleteDocument(Number(id));
+      return;
+    }
+  });
+
+  initState();
 }
