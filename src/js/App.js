@@ -32,6 +32,10 @@ export default function App({ $target }) {
     setCurrDocument(null);
   };
 
+  const handleClickDocument = id => {
+    setCurrDocument(id);
+  };
+
   const initState = async () => {
     this.rootDocuments = await API.getRootDocuments();
     this.currDocument = {};
@@ -41,15 +45,17 @@ export default function App({ $target }) {
     if (id) {
       this.currDocument = await API.getDocument(id);
       this.editor.setState({ nextCurrDocument: this.currDocument });
+      this.sidebar.setState({ nextCurrDocumentId: this.currDocument.id });
     } else {
       this.currDocument = {};
       this.editor.setState({ nextCurrDocument: this.currDocument });
+      this.sidebar.setState({ nextCurrDocumentId: null });
     }
   };
 
   const setRootDocuments = async () => {
     this.rootDocuments = await API.getRootDocuments();
-    this.sidebar.setState(this.rootDocuments);
+    this.sidebar.setState({ nextRootDocument: this.rootDocuments });
   };
 
   this.route = async () => {
@@ -80,6 +86,7 @@ export default function App({ $target }) {
       currDocumentId: null,
       onAddDocument: handleAddDocument,
       onDeleteDocument: handleDeleteDocument,
+      onClickDocument: handleClickDocument,
     });
     this.editor = new Editor({
       $target,

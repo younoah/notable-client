@@ -10,6 +10,7 @@ export default function Sidebar({
   currDocumentId = null,
   onAddDocument,
   onDeleteDocument,
+  onClickDocument,
 }) {
   const $sidebar = document.createElement('nav');
   $sidebar.id = 'sidebar';
@@ -50,15 +51,16 @@ export default function Sidebar({
     if (target.matches('.document-title')) {
       // 사이드바가 리렌더링 x
       const { id } = target.closest('li').dataset;
-      const $clickedDocumentContainer = $('.document-container.clicked ');
-      const $targetDocumentContainer = target.closest('.document-container');
+      // const $clickedDocumentContainer = $('.document-container.clicked ');
+      // const $targetDocumentContainer = target.closest('.document-container');
 
-      if ($clickedDocumentContainer !== null) {
-        $clickedDocumentContainer.classList.remove('clicked');
-      }
-      $targetDocumentContainer.classList.toggle('clicked');
+      // if ($clickedDocumentContainer !== null) {
+      //   $clickedDocumentContainer.classList.remove('clicked');
+      // }
+      // $targetDocumentContainer.classList.toggle('clicked');
 
-      renderEditor(Number(id));
+      // renderEditor(Number(id));
+      onClickDocument(Number(id));
       return;
     }
 
