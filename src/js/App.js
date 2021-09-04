@@ -5,49 +5,51 @@ import Editor from './components/Editor.js';
 import { API } from './utils/api.js';
 import { catchRouteEvent } from './utils/router.js';
 
-export default function App({ $target, initialState = [] }) {
-  this.state = initialState;
-
-  const handleAddDocument = async (title, parentId = null) => {
-    const generatedDocument = await API.addDocument({ title, parentId });
-    const newDocument = {
-      ...generatedDocument,
-      isOpened: parentId ? true : false,
+export default function App({ $target }) {
+  const handleAddDocument = async (parentId, title) => {
+    const document = {
+      parent: parentId,
+      title,
     };
+    const { id } = await API.addDocument(document);
+    setRootDocuments();
+    setCurrDocument(id);
   };
 
-  const handleToggleDocument = id => {};
+  const handleUpdateDocument = async (id, title, content) => {
+    const document = {
+      title,
+      content,
+    };
+    await API.updateDocument(id, document);
+    setRootDocuments();
+    setCurrDocument(id); // 낙관적 업데이트시 삭제 해도 될 듯
+  }; // for editor
 
-  this.setState = nextState => {
-    this.state = nextState;
-    this.route;
+  const handleDeleteDocument = id => {
+    await API.deleteDocument(id);
+    setRootDocuments();
+    setCurrDocument(null);
   };
 
   const initState = async () => {
-    const documents = await API.getRootDocuments();
-    const newDocument = appendOpenStateTo(documents, true);
-    this.state = newDocument;
+    this.rootDocuments = await API.getRootDocuments();
+    this.currDocument = {};
   };
 
-  const appendOpenStateTo = (documents, isRoot) => {
-    const newDocument = documents.map(document => {
-      return {
-        ...document,
-        documents: appendOpenStateTo(document.documents, false),
-        isOpened: isRoot ? true : false,
-      };
-    });
-
-    return newDocument;
-  };
-
-  const renderEditor = async id => {
+  const setCurrDocument = async id => {
     if (id) {
-      const document = await API.getDocument(id);
-      this.editor.setState(document);
+      this.currDocument = await API.getDocument(id);
+      this.editor.setState(this.currDocument);
     } else {
-      this.editor.setState({});
+      this.currDocument = {};
+      this.editor.setState(this.currDocument);
     }
+  };
+
+  const setRootDocuments = async () => {
+    this.rootDocuments = await API.getRootDocuments();
+    this.sidebar.setState(this.rootDocuments);
   };
 
   this.route = async () => {
@@ -69,11 +71,13 @@ export default function App({ $target, initialState = [] }) {
 
     this.sidebar = new Sidebar({
       $target,
-      initialState: this.state,
+      initialState: this.rootDocument,
       renderEditor,
     });
     this.editor = new Editor({
       $target,
+      initialState: this.currDocument,
+      renderSidebar,
     });
 
     this.route();
