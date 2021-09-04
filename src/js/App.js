@@ -40,10 +40,10 @@ export default function App({ $target }) {
   const setCurrDocument = async id => {
     if (id) {
       this.currDocument = await API.getDocument(id);
-      this.editor.setState(this.currDocument);
+      this.editor.setState({ nextCurrDocument: this.currDocument });
     } else {
       this.currDocument = {};
-      this.editor.setState(this.currDocument);
+      this.editor.setState({ nextCurrDocument: this.currDocument });
     }
   };
 
@@ -58,11 +58,11 @@ export default function App({ $target }) {
     this.sidebar.render();
 
     if (pathname === '/') {
-      this.editor.setState({});
+      this.editor.setState({ nextCurrDocument: {} });
     } else if (pathname.indexOf('/documents/') === 0) {
       const [, , id] = pathname.split('/');
       const document = await API.getDocument(id);
-      this.editor.setState(document);
+      this.editor.setState({ nextCurrDocument: document });
     }
   };
 
