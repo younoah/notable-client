@@ -27,6 +27,7 @@ export default function App({ $target }) {
   }; // for editor
 
   const handleDeleteDocument = async id => {
+    console.log('handleDeleteDocument: ');
     await API.deleteDocument(id);
     setRootDocuments();
     setCurrDocument(null);
@@ -42,7 +43,6 @@ export default function App({ $target }) {
   };
 
   const setCurrDocument = async id => {
-    console.log('setCurrDocument: ');
     if (id) {
       this.currDocument = await API.getDocument(id);
       this.editor.setState({ nextCurrDocument: this.currDocument });
@@ -56,7 +56,8 @@ export default function App({ $target }) {
 
   const setRootDocuments = async () => {
     this.rootDocuments = await API.getRootDocuments();
-    this.sidebar.setState({ nextRootDocument: this.rootDocuments });
+    console.log(this.rootDocuments);
+    this.sidebar.setState({ nextRootDocuments: this.rootDocuments });
   };
 
   this.route = async () => {

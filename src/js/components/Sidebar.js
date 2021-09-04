@@ -32,13 +32,9 @@ export default function Sidebar({
     nextCurrDocumentId,
     nextOpenedDocuments,
   }) => {
-    console.log('sidebar - setState');
     this.rootDocuments = nextRootDocuments ?? this.rootDocuments;
-    console.log('this.rootDocuments: ', this.rootDocuments);
     this.currDocumentId = nextCurrDocumentId ?? this.currDocumentId;
-    console.log('this.currDocumentId: ', this.currDocumentId);
     this.openedDocuments = nextOpenedDocuments ?? this.openedDocuments;
-    console.log('this.openedDocuments: ', this.openedDocuments);
     this.render();
   };
 
@@ -52,15 +48,6 @@ export default function Sidebar({
     if (target.matches('.document-title')) {
       // 사이드바가 리렌더링 x
       const { id } = target.closest('li').dataset;
-      // const $clickedDocumentContainer = $('.document-container.clicked ');
-      // const $targetDocumentContainer = target.closest('.document-container');
-
-      // if ($clickedDocumentContainer !== null) {
-      //   $clickedDocumentContainer.classList.remove('clicked');
-      // }
-      // $targetDocumentContainer.classList.toggle('clicked');
-
-      // renderEditor(Number(id));
       onClickDocument(Number(id));
       return;
     }
@@ -89,8 +76,9 @@ export default function Sidebar({
 
     if (target.matches('.fa-trash')) {
       // 사이드바가 리렌더링 o
+      if (!confirm('정말 해당 문서를 삭제하시겠습니까?')) return;
       const { id } = target.closest('li').dataset;
-      deleteDocument(id);
+      onDeleteDocument(Number(id));
       return;
     }
   });
