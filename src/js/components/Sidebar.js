@@ -35,6 +35,11 @@ export default function Sidebar({
     this.rootDocuments = nextRootDocuments ?? this.rootDocuments;
     this.currDocumentId = nextCurrDocumentId ?? this.currDocumentId;
     this.openedDocuments = nextOpenedDocuments ?? this.openedDocuments;
+
+    if (!this.openedDocuments.includes(this.currDocumentId)) {
+      this.openedDocuments.push(this.currDocumentId);
+    }
+
     this.render();
   };
 
@@ -63,6 +68,7 @@ export default function Sidebar({
 
     if (target.matches('.add-root-button-title')) {
       // 사이드바가 리렌더링 o
+
       addDocument();
       return;
     }
@@ -90,13 +96,14 @@ export default function Sidebar({
       return;
     }
 
-    const document = {
+    const newDocument = {
       parent: parentId,
       title: title.trim() !== '' ? title.trim() : '제목없음',
     };
-    const { id } = await API.addDocument(document);
 
-    dispatchRouteEvent(`/documents/${id}`);
+    onAddDocument(newDocument);
+
+    // dispatchRouteEvent(`/documents/${id}`);
   };
 
   const deleteDocument = async id => {

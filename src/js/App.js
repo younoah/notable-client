@@ -6,14 +6,10 @@ import { API } from './utils/api.js';
 import { catchRouteEvent } from './utils/router.js';
 
 export default function App({ $target }) {
-  const handleAddDocument = async (parentId, title) => {
-    const document = {
-      parent: parentId,
-      title,
-    };
-    const { id } = await API.addDocument(document);
-    setRootDocuments();
+  const handleAddDocument = async newDocument => {
+    const { id } = await API.addDocument(newDocument);
     setCurrDocument(id);
+    setRootDocuments();
   };
 
   const handleUpdateDocument = async (id, title, content) => {
@@ -27,7 +23,6 @@ export default function App({ $target }) {
   }; // for editor
 
   const handleDeleteDocument = async id => {
-    console.log('handleDeleteDocument: ');
     await API.deleteDocument(id);
     setRootDocuments();
     setCurrDocument(null);
@@ -56,7 +51,7 @@ export default function App({ $target }) {
 
   const setRootDocuments = async () => {
     this.rootDocuments = await API.getRootDocuments();
-    console.log(this.rootDocuments);
+
     this.sidebar.setState({ nextRootDocuments: this.rootDocuments });
   };
 
