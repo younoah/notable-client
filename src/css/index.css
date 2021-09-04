@@ -150,6 +150,7 @@ main {
 }
 
 .more-button.clicked {
+  background-color: red;
   transform: rotate(90deg);
 }
 

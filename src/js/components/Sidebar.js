@@ -1,9 +1,5 @@
 'use strict';
 
-import { $ } from '../utils/dom.js';
-import { API } from '../utils/api.js';
-import { dispatchRouteEvent } from '../utils/router.js';
-
 export default function Sidebar({
   $target,
   rootDocuments = [],
@@ -11,6 +7,7 @@ export default function Sidebar({
   onAddDocument,
   onDeleteDocument,
   onClickDocument,
+  onClickLogo,
 }) {
   const $sidebar = document.createElement('nav');
   $sidebar.id = 'sidebar';
@@ -28,15 +25,18 @@ export default function Sidebar({
   initState();
 
   this.setState = ({
-    nextRootDocuments,
-    nextCurrDocumentId,
-    nextOpenedDocuments,
+    nextRootDocuments = this.rootDocuments,
+    nextCurrDocumentId = this.currDocumentId,
+    nextOpenedDocuments = this.openedDocuments,
   }) => {
-    this.rootDocuments = nextRootDocuments ?? this.rootDocuments;
-    this.currDocumentId = nextCurrDocumentId ?? this.currDocumentId;
-    this.openedDocuments = nextOpenedDocuments ?? this.openedDocuments;
+    this.rootDocuments = nextRootDocuments;
+    this.currDocumentId = nextCurrDocumentId;
+    this.openedDocuments = nextOpenedDocuments;
 
-    if (!this.openedDocuments.includes(this.currDocumentId)) {
+    if (
+      !this.openedDocuments.includes(this.currDocumentId) &&
+      this.currDocumentId !== null
+    ) {
       this.openedDocuments.push(this.currDocumentId);
     }
 
@@ -46,7 +46,7 @@ export default function Sidebar({
   $sidebar.addEventListener('click', async ({ target }) => {
     // 사이드바가 리렌더링 x
     if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
-      renderEditor();
+      onClickLogo();
       return;
     }
 
@@ -58,11 +58,16 @@ export default function Sidebar({
     }
 
     if (target.matches('.fa-caret-right')) {
-      // 사이드바가 리렌더링 x
+      const { id } = target.closest('.document-item').dataset;
+      const childDocuments = getChildDocumentsById(Number(id));
+      const childDocumentIds = childDocuments.map(document => document.id);
+      this.setState({
+        nextOpenedDocuments: [...this.openedDocuments, ...childDocumentIds],
+      });
+
       const $moreButton = target.closest('.more-button');
-      const $documentList = target.closest('.document-list');
       $moreButton.classList.toggle('clicked');
-      toggleChildDocumentLists($documentList);
+      console.log($moreButton);
       return;
     }
 
@@ -89,6 +94,29 @@ export default function Sidebar({
     }
   });
 
+  const getChildDocumentsById = id => {
+    const document = findDocument(id);
+
+    return [...document.documents];
+  };
+
+  const findDocument = id => {
+    let targetDocument = null;
+    const stack = [...this.rootDocuments];
+
+    while (stack.length > 0) {
+      const currDocument = stack.pop();
+
+      if (currDocument.id === id) {
+        targetDocument = currDocument;
+        break;
+      }
+      currDocument.documents.forEach(document => stack.push(document));
+    }
+
+    return targetDocument;
+  };
+
   const addDocument = async (parentId = null) => {
     const title = prompt('새로 추가할 문서의 제목을 작성해주세요.');
 
@@ -102,24 +130,6 @@ export default function Sidebar({
     };
 
     onAddDocument(newDocument);
-
-    // dispatchRouteEvent(`/documents/${id}`);
-  };
-
-  const deleteDocument = async id => {
-    if (!confirm('정말 해당 문서를 삭제하시겠습니까?')) return;
-    await API.deleteDocument(id);
-    dispatchRouteEvent(`/`);
-  };
-
-  const toggleChildDocumentLists = $documentList => {
-    const childDocumentLists = [...$documentList.children].filter($node =>
-      $node.matches('.document-list')
-    );
-
-    childDocumentLists.forEach($documentList =>
-      $documentList.classList.toggle('hide')
-    );
   };
 
   const renderDocumentList = (document, childrenLength) => {
@@ -166,6 +176,7 @@ export default function Sidebar({
   };
 
   this.render = async () => {
+    console.log('사이드바 렌더');
     $sidebar.innerHTML = /* html */ `
       <header class="sidebar__header">
         <div class="logo">

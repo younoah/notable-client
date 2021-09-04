@@ -32,6 +32,10 @@ export default function App({ $target }) {
     setCurrDocument(id);
   };
 
+  const handleClickLogo = () => {
+    this.editor.setState({ nextCurrDocument: {} });
+  };
+
   const initState = async () => {
     this.rootDocuments = await API.getRootDocuments();
     this.currDocument = {};
@@ -84,6 +88,7 @@ export default function App({ $target }) {
       onAddDocument: handleAddDocument,
       onDeleteDocument: handleDeleteDocument,
       onClickDocument: handleClickDocument,
+      onClickLogo: handleClickLogo,
     });
     this.editor = new Editor({
       $target,
