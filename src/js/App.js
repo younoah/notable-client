@@ -26,7 +26,7 @@ export default function App({ $target }) {
     setCurrDocument(id); // 낙관적 업데이트시 삭제 해도 될 듯
   }; // for editor
 
-  const handleDeleteDocument = id => {
+  const handleDeleteDocument = async id => {
     await API.deleteDocument(id);
     setRootDocuments();
     setCurrDocument(null);
@@ -66,21 +66,28 @@ export default function App({ $target }) {
     }
   };
 
+  this.render = () => {
+    this.sidebar.render();
+    this.editor.render();
+  };
+
   const init = async () => {
     await initState();
 
     this.sidebar = new Sidebar({
       $target,
-      initialState: this.rootDocument,
-      renderEditor,
+      rootDocuments: this.rootDocuments,
+      currDocumentId: null,
+      onAddDocument: handleAddDocument,
+      onDeleteDocument: handleDeleteDocument,
     });
     this.editor = new Editor({
       $target,
       initialState: this.currDocument,
-      renderSidebar,
+      onUpdateDocument: handleUpdateDocument,
     });
 
-    this.route();
+    this.render();
   };
 
   init();

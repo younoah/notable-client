@@ -4,11 +4,41 @@ import { $ } from '../utils/dom.js';
 import { API } from '../utils/api.js';
 import { dispatchRouteEvent } from '../utils/router.js';
 
-export default function Sidebar({ $target, initialState = [], renderEditor }) {
+export default function Sidebar({
+  $target,
+  rootDocuments = [],
+  currDocumentId,
+  onAddDocument,
+  onDeleteDocument,
+}) {
   const $sidebar = document.createElement('nav');
   $sidebar.id = 'sidebar';
   $target.append($sidebar);
-  this.state = initialState;
+
+  const initState = () => {
+    this.rootDocuments = rootDocuments;
+    console.log('this.rootDocuments: ', this.rootDocuments);
+    this.currDocumentId = currDocumentId;
+    console.log('this.currDocumentId: ', this.currDocumentId);
+    this.openedDocuments = [];
+    this.rootDocuments.forEach(document =>
+      this.openedDocuments.push(document.id)
+    );
+    console.log('this.openedDocuments: ', this.openedDocuments);
+  };
+
+  initState();
+
+  this.setState = ({
+    nextRootDocuments,
+    nextCurrDocumentId,
+    nextOpenedDocuments,
+  }) => {
+    this.rootDocuments = nextRootDocuments ?? this.rootDocuments;
+    this.currDocumentId = nextCurrDocumentId ?? this.currDocumentId;
+    this.openedDocuments = nextOpenedDocuments ?? this.openedDocuments;
+    this.render();
+  };
 
   $sidebar.addEventListener('click', async ({ target }) => {
     // 사이드바가 리렌더링 x
@@ -138,7 +168,6 @@ export default function Sidebar({ $target, initialState = [], renderEditor }) {
   };
 
   this.render = async () => {
-    console.log('sidebar render', this.state);
     $sidebar.innerHTML = /* html */ `
       <header class="sidebar__header">
         <div class="logo">
@@ -156,7 +185,7 @@ export default function Sidebar({ $target, initialState = [], renderEditor }) {
         </button>
       </div>
       <div class="sidebar__document-list-container">
-        ${this.state
+        ${this.rootDocuments
           .map(document =>
             renderDocumentList(document, document.documents.length, true)
           )
