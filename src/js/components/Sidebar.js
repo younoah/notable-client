@@ -18,14 +18,11 @@ export default function Sidebar({
 
   const initState = () => {
     this.rootDocuments = rootDocuments;
-    console.log('this.rootDocuments: ', this.rootDocuments);
     this.currDocumentId = currDocumentId;
-    console.log('this.currDocumentId: ', this.currDocumentId);
     this.openedDocuments = [];
     this.rootDocuments.forEach(document =>
       this.openedDocuments.push(document.id)
     );
-    console.log('this.openedDocuments: ', this.openedDocuments);
   };
 
   initState();
@@ -35,9 +32,13 @@ export default function Sidebar({
     nextCurrDocumentId,
     nextOpenedDocuments,
   }) => {
+    console.log('sidebar - setState');
     this.rootDocuments = nextRootDocuments ?? this.rootDocuments;
+    console.log('this.rootDocuments: ', this.rootDocuments);
     this.currDocumentId = nextCurrDocumentId ?? this.currDocumentId;
+    console.log('this.currDocumentId: ', this.currDocumentId);
     this.openedDocuments = nextOpenedDocuments ?? this.openedDocuments;
+    console.log('this.openedDocuments: ', this.openedDocuments);
     this.render();
   };
 
@@ -126,11 +127,16 @@ export default function Sidebar({
     );
   };
 
-  const renderDocumentList = (document, childrenLength, isRoot) => {
+  const renderDocumentList = (document, childrenLength) => {
+    const { id, title } = document;
     return /* html */ `
-      <ul class="document-list ${isRoot ? '' : 'hide'}">
+      <ul class="document-list ${
+        this.openedDocuments.includes(id) ? '' : 'hide'
+      }">
         <li data-id=${document.id} class="document-item">
-          <div class="document-container">
+          <div class="document-container ${
+            this.currDocumentId === id ? 'clicked' : ''
+          }">
             ${
               childrenLength > 0
                 ? /* html */ `
@@ -144,7 +150,7 @@ export default function Sidebar({
                   </span>
                 `
             }
-            <span class="document-title">${document.title}</span>
+            <span class="document-title">${title}</span>
           </div>
           <div class="document-buttons">
             <button class="add-button">
@@ -162,11 +168,6 @@ export default function Sidebar({
           .join('')}
       </ul>
     `;
-  };
-
-  this.setState = async () => {
-    // this.state = await API.getRootDocuments();
-    this.render();
   };
 
   this.render = async () => {

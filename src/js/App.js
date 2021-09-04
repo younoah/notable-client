@@ -42,6 +42,7 @@ export default function App({ $target }) {
   };
 
   const setCurrDocument = async id => {
+    console.log('setCurrDocument: ');
     if (id) {
       this.currDocument = await API.getDocument(id);
       this.editor.setState({ nextCurrDocument: this.currDocument });
