@@ -16,10 +16,8 @@ export default function Sidebar({
   const initState = () => {
     this.rootDocuments = rootDocuments;
     this.currDocumentId = currDocumentId;
-    this.openedDocuments = [];
-    this.rootDocuments.forEach(document =>
-      this.openedDocuments.push(document.id)
-    );
+    this.openedDocuments = this.rootDocuments.map(document => document.id);
+    this.toggledDocuments = [];
   };
 
   initState();
@@ -28,10 +26,12 @@ export default function Sidebar({
     nextRootDocuments = this.rootDocuments,
     nextCurrDocumentId = this.currDocumentId,
     nextOpenedDocuments = this.openedDocuments,
+    nextToggledDocuments = this.toggledDocuments,
   }) => {
     this.rootDocuments = nextRootDocuments;
     this.currDocumentId = nextCurrDocumentId;
     this.openedDocuments = nextOpenedDocuments;
+    this.toggledDocuments = nextToggledDocuments;
 
     if (
       !this.openedDocuments.includes(this.currDocumentId) &&
@@ -58,22 +58,15 @@ export default function Sidebar({
     }
 
     if (target.matches('.fa-caret-right')) {
-      const { id } = target.closest('.document-item').dataset;
-      const childDocuments = getChildDocumentsById(Number(id));
-      const childDocumentIds = childDocuments.map(document => document.id);
-      this.setState({
-        nextOpenedDocuments: [...this.openedDocuments, ...childDocumentIds],
-      });
-
       const $moreButton = target.closest('.more-button');
-      $moreButton.classList.toggle('clicked');
-      console.log($moreButton);
+      $moreButton.matches('.clicked')
+        ? openDocument(target)
+        : closeDocument(target);
       return;
     }
 
     if (target.matches('.add-root-button-title')) {
       // 사이드바가 리렌더링 o
-
       addDocument();
       return;
     }
@@ -132,6 +125,32 @@ export default function Sidebar({
     onAddDocument(newDocument);
   };
 
+  const openDocument = target => {
+    const { id: targetId } = target.closest('.document-item').dataset;
+    const childDocuments = getChildDocumentsById(Number(targetId));
+    const childDocumentIds = childDocuments.map(document => document.id);
+    const nextOpenedDocuments = this.openedDocuments.filter(
+      id => !childDocumentIds.includes(id)
+    );
+    const nextToggledDocuments = this.toggledDocuments.filter(
+      id => id !== Number(targetId)
+    );
+    this.setState({
+      nextOpenedDocuments,
+      nextToggledDocuments,
+    });
+  };
+
+  const closeDocument = target => {
+    const { id } = target.closest('.document-item').dataset;
+    const childDocuments = getChildDocumentsById(Number(id));
+    const childDocumentIds = childDocuments.map(document => document.id);
+    this.setState({
+      nextOpenedDocuments: [...this.openedDocuments, ...childDocumentIds],
+      nextToggledDocuments: [...this.toggledDocuments, Number(id)],
+    });
+  };
+
   const renderDocumentList = (document, childrenLength) => {
     const { id, title } = document;
     return /* html */ `
@@ -145,7 +164,9 @@ export default function Sidebar({
             ${
               childrenLength > 0
                 ? /* html */ `
-              <button class="more-button">
+              <button class="more-button ${
+                this.toggledDocuments.includes(id) ? 'clicked' : ''
+              }">
                 <i class="fas fa-caret-right"></i>
               </button>
             `
@@ -168,7 +189,7 @@ export default function Sidebar({
         </li>
         ${document.documents
           .map(document =>
-            renderDocumentList(document, document.documents.length, false)
+            renderDocumentList(document, document.documents.length)
           )
           .join('')}
       </ul>
@@ -196,7 +217,7 @@ export default function Sidebar({
       <div class="sidebar__document-list-container">
         ${this.rootDocuments
           .map(document =>
-            renderDocumentList(document, document.documents.length, true)
+            renderDocumentList(document, document.documents.length)
           )
           .join('')}
       <div>

@@ -1,13 +1,3 @@
-function Test() {
-  this.a = 'this is a';
+const arr = [1];
 
-  const doa = newa => {
-    console.log(newa);
-    this.a = newa ?? this.a;
-  };
-
-  doa();
-}
-
-const test = new Test();
-console.log(test.a);
+console.log(arr.splice(0, 1));
