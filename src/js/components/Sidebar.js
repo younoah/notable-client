@@ -7,7 +7,7 @@ import { dispatchRouteEvent } from '../utils/router.js';
 export default function Sidebar({
   $target,
   rootDocuments = [],
-  currDocumentId,
+  currDocumentId = null,
   onAddDocument,
   onDeleteDocument,
 }) {

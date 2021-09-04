@@ -83,7 +83,7 @@ export default function App({ $target }) {
     });
     this.editor = new Editor({
       $target,
-      initialState: this.currDocument,
+      currDocument: this.currDocument,
       onUpdateDocument: handleUpdateDocument,
     });
 
