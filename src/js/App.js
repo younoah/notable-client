@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar.js';
 import Editor from './components/Editor.js';
 import { API } from './utils/api.js';
 import { catchRouteEvent } from './utils/router.js';
+import { getParentDocumentById } from './utils/document.js';
 
 export default function App({ $target }) {
   const handleAddDocument = async newDocument => {
@@ -11,11 +12,17 @@ export default function App({ $target }) {
 
     const rootDocuments = await API.getRootDocuments();
     const currDocument = await API.getDocument(id);
+    const parentDocument = getParentDocumentById(rootDocuments, Number(id));
+    const nextToggledDocuments = [
+      ...this.sidebar.toggledDocuments,
+      parentDocument.id,
+    ];
 
     this.editor.setState({ nextCurrDocument: currDocument });
     this.sidebar.setState({
       nextRootDocuments: rootDocuments,
       nextSelectedDocumentId: currDocument.id,
+      nextToggledDocuments,
     });
   };
 
