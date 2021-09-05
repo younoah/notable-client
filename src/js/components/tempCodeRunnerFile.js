@@ -1,1 +1,0 @@
-$moreButton.matches('.toggled')
