@@ -1,6 +1,9 @@
 'use strict';
 
-import { getParentDocumentById } from '../utils/document.js';
+import {
+  getParentDocumentById,
+  getDescendantDocumentIdsById,
+} from '../utils/document.js';
 
 const MESSAGE = Object.freeze({
   NEW_DOCUMENT: '새로 추가할 문서의 제목을 작성해주세요.',
@@ -70,8 +73,13 @@ export default function Sidebar({
 
   const closeDocument = target => {
     const { id: targetId } = target.closest('.document-item').dataset;
+    const targetAndDescendantDocumentIds = [
+      ...getDescendantDocumentIdsById(this.rootDocuments, Number(targetId)),
+      Number(targetId),
+    ];
+
     const nextToggledDocumentIds = this.toggledDocumentIds.filter(
-      id => id !== Number(targetId)
+      id => !targetAndDescendantDocumentIds.includes(id)
     );
     this.setState({
       nextToggledDocumentIds,
