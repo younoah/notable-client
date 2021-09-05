@@ -1,6 +1,10 @@
 'use strict';
 
-import { getChildDocumentsById } from '../utils/document.js';
+import {
+  getChildDocumentsById,
+  getChildDocumentIdsById,
+  getParentDocumentById,
+} from '../utils/document.js';
 
 export default function Sidebar({
   $target,
@@ -90,12 +94,26 @@ export default function Sidebar({
     });
   };
 
-  const renderDocumentList = (document, childrenLength) => {
+  const isToggledChild = document => {
+    let res = false;
+    const parentDocument = getParentDocumentById(
+      this.rootDocuments,
+      document.id
+    );
+
+    if (this.toggledDocuments.includes(parentDocument.id)) {
+      res = true;
+    }
+
+    return res;
+  };
+
+  const renderDocumentList = (document, childrenLength, isRoot = false) => {
     const { id, title } = document;
 
     return /* html */ `
       <ul class="document-list ${
-        this.openedDocuments.includes(id) ? '' : 'hide'
+        isRoot || isToggledChild(document) ? '' : 'hide'
       }">
         <li data-id=${document.id} class="document-item">
           <div class="document-container ${
@@ -156,7 +174,7 @@ export default function Sidebar({
       <div class="sidebar__document-list-container">
         ${this.rootDocuments
           .map(document =>
-            renderDocumentList(document, document.documents.length)
+            renderDocumentList(document, document.documents.length, true)
           )
           .join('')}
       <div>

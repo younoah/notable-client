@@ -1,8 +1,8 @@
 'use strict';
 
-export const findDocumentById = (documents, id) => {
+export const findDocumentById = (rootDocuments, id) => {
   let targetDocument = null;
-  const stack = [...documents];
+  const stack = [...rootDocuments];
 
   while (stack.length > 0) {
     const currDocument = stack.pop();
@@ -17,9 +17,9 @@ export const findDocumentById = (documents, id) => {
   return targetDocument;
 };
 
-export const getParentDocumentById = (documents, id) => {
+export const getParentDocumentById = (rootDocuments, id) => {
   let parentDocument = null;
-  const stack = [...documents];
+  const stack = [...rootDocuments];
 
   while (stack.length > 0) {
     const currDocument = stack.pop();
@@ -37,20 +37,20 @@ export const getParentDocumentById = (documents, id) => {
   return parentDocument;
 };
 
-export const getChildDocumentsById = (documents, id) => {
-  const document = findDocumentById(documents, id);
+export const getChildDocumentsById = (rootDocuments, id) => {
+  const document = findDocumentById(rootDocuments, id);
 
   return [...document.documents];
 };
 
-export const getChildDocumentIdsById = (documents, id) => {
-  const document = findDocumentById(documents, id);
+export const getChildDocumentIdsById = (rootDocuments, id) => {
+  const document = findDocumentById(rootDocuments, id);
 
   return document.documents.map(childDocument => childDocument.id);
 };
 
-export const getDescendantDocumentsById = (documents, id) => {
-  const startingDocument = findDocumentById(documents, id);
+export const getDescendantDocumentsById = (rootDocuments, id) => {
+  const startingDocument = findDocumentById(rootDocuments, id);
   const descendantDocuments = [];
   const stack = [...startingDocument.documents];
 
@@ -63,8 +63,8 @@ export const getDescendantDocumentsById = (documents, id) => {
   return descendantDocuments;
 };
 
-export const getDescendantDocumentIdsById = (documents, id) => {
-  const startingDocument = findDocumentById(documents, id);
+export const getDescendantDocumentIdsById = (rootDocuments, id) => {
+  const startingDocument = findDocumentById(rootDocuments, id);
   const descendantDocumentIds = [];
   const stack = [...startingDocument.documents];
 
