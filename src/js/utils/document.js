@@ -76,3 +76,18 @@ export const getDescendantDocumentIdsById = (rootDocuments, id) => {
 
   return descendantDocumentIds;
 };
+
+export const getAncestorDocumentIdsByDocument = (
+  rootDocument,
+  targetDocument
+) => {
+  const AncestorDocumentIds = [];
+  let currDocument = targetDocument;
+
+  while (getParentDocumentById(rootDocument, currDocument.id)) {
+    const parentDocument = getParentDocumentById(rootDocument, currDocument.id);
+    AncestorDocumentIds.push(parentDocument.id);
+    currDocument = parentDocument;
+  }
+  return AncestorDocumentIds;
+};

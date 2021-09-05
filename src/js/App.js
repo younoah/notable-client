@@ -4,7 +4,10 @@ import Sidebar from './components/Sidebar.js';
 import Editor from './components/Editor.js';
 import { API } from './utils/api.js';
 import { initListenRouteEvent, dispatchRouteEvent } from './utils/router.js';
-import { getParentDocumentById } from './utils/document.js';
+import {
+  getParentDocumentById,
+  getAncestorDocumentIdsByDocument,
+} from './utils/document.js';
 
 export default function App({ $target }) {
   const handleAddDocument = async newDocument => {
@@ -110,9 +113,14 @@ export default function App({ $target }) {
       const [, , id] = pathname.split('/');
       const rootDocuments = await API.getRootDocuments();
       const currDocument = await API.getDocument(id);
-      const parentDocument = getParentDocumentById(rootDocuments, Number(id));
-      const nextToggledDocumentIds = [...this.sidebar.toggledDocumentIds];
-      parentDocument && nextToggledDocumentIds.push(parentDocument.id);
+      const ancestorDocumentIds = getAncestorDocumentIdsByDocument(
+        rootDocuments,
+        currDocument
+      );
+      const nextToggledDocumentIds = [
+        ...this.sidebar.toggledDocumentIds,
+        ...ancestorDocumentIds,
+      ];
 
       this.editor.setState({ nextCurrDocument: currDocument });
       this.sidebar.setState({
@@ -121,11 +129,6 @@ export default function App({ $target }) {
         nextToggledDocumentIds,
       });
     }
-  };
-
-  this.render = () => {
-    this.sidebar.render();
-    this.editor.render();
   };
 
   initialize();
