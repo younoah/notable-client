@@ -22,27 +22,19 @@ export default function Sidebar({
   const initState = () => {
     this.rootDocuments = rootDocuments;
     this.selectedDocumentId = selectedDocumentId;
-    this.openedDocuments = this.rootDocuments.map(document => document.id);
     this.toggledDocuments = [];
   };
 
   this.setState = ({
     nextRootDocuments = this.rootDocuments,
     nextSelectedDocumentId = this.selectedDocumentId,
-    nextOpenedDocuments = this.openedDocuments,
     nextToggledDocuments = this.toggledDocuments,
   }) => {
     this.rootDocuments = nextRootDocuments;
     this.selectedDocumentId = nextSelectedDocumentId;
-    this.openedDocuments = nextOpenedDocuments;
     this.toggledDocuments = nextToggledDocuments;
 
-    if (
-      !this.openedDocuments.includes(this.selectedDocumentId) &&
-      this.selectedDocumentId !== null
-    ) {
-      this.openedDocuments.push(this.selectedDocumentId);
-    }
+    // 선택된 아이디의 부모가 만약 this.toggledDocuments에 없다면 부모를 this.toggledDocuments에 추가하기
 
     this.render();
   };
@@ -64,33 +56,19 @@ export default function Sidebar({
 
   const openDocument = target => {
     const { id: targetId } = target.closest('.document-item').dataset;
-    const childDocuments = getChildDocumentsById(
-      this.rootDocuments,
-      Number(targetId)
-    );
-    const childDocumentIds = childDocuments.map(document => document.id);
-    const nextOpenedDocuments = this.openedDocuments.filter(
-      id => !childDocumentIds.includes(id)
-    );
-    const nextToggledDocuments = this.toggledDocuments.filter(
-      id => id !== Number(targetId)
-    );
+    const nextToggledDocuments = [...this.toggledDocuments, Number(targetId)];
     this.setState({
-      nextOpenedDocuments,
       nextToggledDocuments,
     });
   };
 
   const closeDocument = target => {
-    const { id } = target.closest('.document-item').dataset;
-    const childDocuments = getChildDocumentsById(
-      this.rootDocuments,
-      Number(id)
+    const { id: targetId } = target.closest('.document-item').dataset;
+    const nextToggledDocuments = this.toggledDocuments.filter(
+      id => id !== Number(targetId)
     );
-    const childDocumentIds = childDocuments.map(document => document.id);
     this.setState({
-      nextOpenedDocuments: [...this.openedDocuments, ...childDocumentIds],
-      nextToggledDocuments: [...this.toggledDocuments, Number(id)],
+      nextToggledDocuments,
     });
   };
 
@@ -195,9 +173,10 @@ export default function Sidebar({
 
     if (target.matches('.fa-caret-right')) {
       const $moreButton = target.closest('.more-button');
-      $moreButton.matches('.clicked')
-        ? openDocument(target)
-        : closeDocument(target);
+      $moreButton.matches('.toggled')
+        ? closeDocument(target)
+        : openDocument(target);
+
       return;
     }
 
