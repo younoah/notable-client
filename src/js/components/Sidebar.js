@@ -107,7 +107,6 @@ export default function Sidebar({
       $moreButton.matches('.toggled')
         ? closeDocument(targetId)
         : openDocument(targetId);
-
       return;
     }
 

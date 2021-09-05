@@ -56,7 +56,7 @@ export default function App({ $target }) {
     this.editor.setState({ nextCurrDocument: {} });
     this.sidebar.setState({
       nextRootDocuments: rootDocuments,
-      nextCurrDocumentId: null,
+      nextSelectedDocumentId: null,
       nextToggledDocumentIds,
     });
   };
@@ -85,7 +85,7 @@ export default function App({ $target }) {
     this.sidebar = new Sidebar({
       $target,
       rootDocuments: rootDocuments,
-      currDocumentId: null,
+      selectedDocumentId: null,
       onAddDocument: handleAddDocument,
       onDeleteDocument: handleDeleteDocument,
       onClickDocument: handleClickDocument,
