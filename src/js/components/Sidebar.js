@@ -5,11 +5,11 @@ import { getChildDocumentsById } from '../utils/document.js';
 export default function Sidebar({
   $target,
   rootDocuments = [],
-  currDocumentId = null,
+  selectedDocumentId = null,
+  onClickLogo,
+  onClickDocument,
   onAddDocument,
   onDeleteDocument,
-  onClickDocument,
-  onClickLogo,
 }) {
   const $sidebar = document.createElement('nav');
   $sidebar.id = 'sidebar';
@@ -17,27 +17,27 @@ export default function Sidebar({
 
   const initState = () => {
     this.rootDocuments = rootDocuments;
-    this.currDocumentId = currDocumentId;
+    this.selectedDocumentId = selectedDocumentId;
     this.openedDocuments = this.rootDocuments.map(document => document.id);
     this.toggledDocuments = [];
   };
 
   this.setState = ({
     nextRootDocuments = this.rootDocuments,
-    nextCurrDocumentId = this.currDocumentId,
+    nextSelectedDocumentId = this.selectedDocumentId,
     nextOpenedDocuments = this.openedDocuments,
     nextToggledDocuments = this.toggledDocuments,
   }) => {
     this.rootDocuments = nextRootDocuments;
-    this.currDocumentId = nextCurrDocumentId;
+    this.selectedDocumentId = nextSelectedDocumentId;
     this.openedDocuments = nextOpenedDocuments;
     this.toggledDocuments = nextToggledDocuments;
 
     if (
-      !this.openedDocuments.includes(this.currDocumentId) &&
-      this.currDocumentId !== null
+      !this.openedDocuments.includes(this.selectedDocumentId) &&
+      this.selectedDocumentId !== null
     ) {
-      this.openedDocuments.push(this.currDocumentId);
+      this.openedDocuments.push(this.selectedDocumentId);
     }
 
     this.render();
@@ -99,13 +99,13 @@ export default function Sidebar({
       }">
         <li data-id=${document.id} class="document-item">
           <div class="document-container ${
-            this.currDocumentId === id ? 'clicked' : ''
+            this.selectedDocumentId === id ? 'selected' : ''
           }">
             ${
               childrenLength > 0
                 ? /* html */ `
               <button class="more-button ${
-                this.toggledDocuments.includes(id) ? 'clicked' : ''
+                this.toggledDocuments.includes(id) ? 'toggled' : ''
               }">
                 <i class="fas fa-caret-right"></i>
               </button>

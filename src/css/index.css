@@ -149,7 +149,7 @@ main {
   color: var(--light-blue-color);
 }
 
-.more-button.clicked {
+.more-button.toggled {
   transform: rotate(90deg);
 }
 
@@ -170,7 +170,7 @@ main {
   border-radius: 4px;
 }
 
-.document-container.clicked {
+.document-container.selected {
   background-color: var(--light-blue-color);
   border-radius: 4px;
 }

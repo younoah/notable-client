@@ -45,7 +45,7 @@ export default function App({ $target }) {
     if (id) {
       this.currDocument = await API.getDocument(id);
       this.editor.setState({ nextCurrDocument: this.currDocument });
-      this.sidebar.setState({ nextCurrDocumentId: this.currDocument.id });
+      this.sidebar.setState({ nextSelectedDocumentId: this.currDocument.id });
     } else {
       this.currDocument = {};
       this.editor.setState({ nextCurrDocument: this.currDocument });
