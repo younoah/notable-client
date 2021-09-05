@@ -1,5 +1,7 @@
 'use strict';
 
+import { getChildDocumentsById } from '../utils/document.js';
+
 export default function Sidebar({
   $target,
   rootDocuments = [],
@@ -41,29 +43,6 @@ export default function Sidebar({
     this.render();
   };
 
-  const getChildDocumentsById = id => {
-    const document = findDocument(id);
-
-    return [...document.documents];
-  };
-
-  const findDocument = id => {
-    let targetDocument = null;
-    const stack = [...this.rootDocuments];
-
-    while (stack.length > 0) {
-      const currDocument = stack.pop();
-
-      if (currDocument.id === id) {
-        targetDocument = currDocument;
-        break;
-      }
-      currDocument.documents.forEach(document => stack.push(document));
-    }
-
-    return targetDocument;
-  };
-
   const addDocument = async (parentId = null) => {
     const title = prompt('새로 추가할 문서의 제목을 작성해주세요.');
 
@@ -81,7 +60,10 @@ export default function Sidebar({
 
   const openDocument = target => {
     const { id: targetId } = target.closest('.document-item').dataset;
-    const childDocuments = getChildDocumentsById(Number(targetId));
+    const childDocuments = getChildDocumentsById(
+      this.rootDocuments,
+      Number(targetId)
+    );
     const childDocumentIds = childDocuments.map(document => document.id);
     const nextOpenedDocuments = this.openedDocuments.filter(
       id => !childDocumentIds.includes(id)
@@ -97,7 +79,10 @@ export default function Sidebar({
 
   const closeDocument = target => {
     const { id } = target.closest('.document-item').dataset;
-    const childDocuments = getChildDocumentsById(Number(id));
+    const childDocuments = getChildDocumentsById(
+      this.rootDocuments,
+      Number(id)
+    );
     const childDocumentIds = childDocuments.map(document => document.id);
     this.setState({
       nextOpenedDocuments: [...this.openedDocuments, ...childDocumentIds],
