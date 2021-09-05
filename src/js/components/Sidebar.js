@@ -4,6 +4,7 @@ import {
   getParentDocumentById,
   getDescendantDocumentIdsById,
 } from '../utils/document.js';
+import sidebarTemplateBuilder from '../templates/sidebarTemplate.js';
 
 const MESSAGE = Object.freeze({
   NEW_DOCUMENT: '새로 추가할 문서의 제목을 작성해주세요.',
@@ -86,91 +87,15 @@ export default function Sidebar({
     });
   };
 
-  const isToggledChild = document => {
-    let res = false;
-    const parentDocument = getParentDocumentById(
-      this.rootDocuments,
-      document.id
-    );
-
-    if (this.toggledDocumentIds.includes(parentDocument.id)) {
-      res = true;
-    }
-
-    return res;
-  };
-
-  const renderDocumentList = (document, childrenLength, isRoot = false) => {
-    const { id, title } = document;
-
-    return /* html */ `
-      <ul class="document-list ${
-        isRoot || isToggledChild(document) ? '' : 'hide'
-      }">
-        <li data-id=${document.id} class="document-item">
-          <div class="document-container ${
-            this.selectedDocumentId === id ? 'selected' : ''
-          }">
-            ${
-              childrenLength > 0
-                ? /* html */ `
-              <button class="more-button ${
-                this.toggledDocumentIds.includes(id) ? 'toggled' : ''
-              }">
-                <i class="fas fa-caret-right"></i>
-              </button>
-            `
-                : /* html */ `
-                  <span class="dot">
-                    <i class="fas fa-genderless"></i>
-                  </span>
-                `
-            }
-            <span class="document-title">${title}</span>
-          </div>
-          <div class="document-buttons">
-            <button class="add-button">
-              <i class="fas fa-plus"></i>
-            </button>
-            <button class="delete-button">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </li>
-        ${document.documents
-          .map(document =>
-            renderDocumentList(document, document.documents.length)
-          )
-          .join('')}
-      </ul>
-    `;
-  };
-
   this.render = async () => {
-    $sidebar.innerHTML = /* html */ `
-      <header class="sidebar__header">
-        <div class="logo">
-          <i class="fab fa-accusoft"></i>
-          <span class="logo-title">Notable</span>
-        </div>
-        <button class="hide-button">
-          <i class="fas fa-bars"></i>
-        </button>
-      </header>
-      <div class="sidebar__add-button">
-        <button class="add-root-button">
-          <i class="fas fa-plus"></i>
-          <span class="add-root-button-title">New Document</span>
-        </button>
-      </div>
-      <div class="sidebar__document-list-container">
-        ${this.rootDocuments
-          .map(document =>
-            renderDocumentList(document, document.documents.length, true)
-          )
-          .join('')}
-      <div>
-    `;
+    console.log('사이드바 렌더');
+    const sidebarTemplate = new sidebarTemplateBuilder() //
+      .setRootDocuments(this.rootDocuments)
+      .setToggledDocumentIds(this.toggledDocumentIds)
+      .setSelectedDocumentId(this.selectedDocumentId)
+      .build();
+
+    $sidebar.innerHTML = sidebarTemplate.getSidebarTemplate();
   };
 
   $sidebar.addEventListener('click', async ({ target }) => {
