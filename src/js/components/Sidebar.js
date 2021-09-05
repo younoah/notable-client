@@ -78,8 +78,7 @@ export default function Sidebar({
     });
   };
 
-  this.render = async () => {
-    console.log('사이드바 렌더');
+  this.render = () => {
     const sidebarTemplate = new sidebarTemplateBuilder()
       .setRootDocuments(this.rootDocuments)
       .setToggledDocumentIds(this.toggledDocumentIds)

@@ -26,8 +26,6 @@ export default function Editor({
   };
 
   this.render = () => {
-    console.log('에디터 렌더');
-
     const isEmptyDocument = Object.keys(this.currDocument).length <= 0;
     window.document.title = isEmptyDocument
       ? 'Notable'
