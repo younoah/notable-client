@@ -1,9 +1,6 @@
 'use strict';
 
-import {
-  getParentDocumentById,
-  getDescendantDocumentIdsById,
-} from '../utils/document.js';
+import { getDescendantDocumentIdsById } from '../utils/document.js';
 import sidebarTemplateBuilder from '../templates/sidebarTemplate.js';
 
 const MESSAGE = Object.freeze({
@@ -44,9 +41,7 @@ export default function Sidebar({
     this.render();
   };
 
-  const addDocument = async (parentId = null) => {
-    const title = prompt(MESSAGE.NEW_DOCUMENT);
-
+  const addDocument = async ({ title, parentId = null }) => {
     if (title === null) {
       return;
     }
@@ -59,9 +54,7 @@ export default function Sidebar({
     onAddDocument(newDocument);
   };
 
-  const openDocument = target => {
-    const { id: targetId } = target.closest('.document-item').dataset;
-
+  const openDocument = targetId => {
     if (this.toggledDocumentIds.includes(Number(targetId))) return;
     const nextToggledDocumentIds = [
       ...this.toggledDocumentIds,
@@ -72,13 +65,11 @@ export default function Sidebar({
     });
   };
 
-  const closeDocument = target => {
-    const { id: targetId } = target.closest('.document-item').dataset;
+  const closeDocument = targetId => {
     const targetAndDescendantDocumentIds = [
       ...getDescendantDocumentIdsById(this.rootDocuments, Number(targetId)),
       Number(targetId),
     ];
-
     const nextToggledDocumentIds = this.toggledDocumentIds.filter(
       id => !targetAndDescendantDocumentIds.includes(id)
     );
@@ -89,7 +80,7 @@ export default function Sidebar({
 
   this.render = async () => {
     console.log('사이드바 렌더');
-    const sidebarTemplate = new sidebarTemplateBuilder() //
+    const sidebarTemplate = new sidebarTemplateBuilder()
       .setRootDocuments(this.rootDocuments)
       .setToggledDocumentIds(this.toggledDocumentIds)
       .setSelectedDocumentId(this.selectedDocumentId)
@@ -112,21 +103,24 @@ export default function Sidebar({
 
     if (target.matches('.fa-caret-right')) {
       const $moreButton = target.closest('.more-button');
+      const { id: targetId } = target.closest('.document-item').dataset;
       $moreButton.matches('.toggled')
-        ? closeDocument(target)
-        : openDocument(target);
+        ? closeDocument(targetId)
+        : openDocument(targetId);
 
       return;
     }
 
     if (target.matches('.add-root-button-title')) {
-      addDocument();
+      const title = prompt(MESSAGE.NEW_DOCUMENT);
+      addDocument({ title });
       return;
     }
 
     if (target.matches('.fa-plus')) {
+      const title = prompt(MESSAGE.NEW_DOCUMENT);
       const { id: parentId } = target.closest('li').dataset;
-      addDocument(Number(parentId));
+      addDocument({ title, parentId: Number(parentId) });
       return;
     }
 
