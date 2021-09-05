@@ -4,7 +4,7 @@ export const editorTemplate = document => {
   return /* html */ `
     <div class="editor-container">
       <h1 contenteditable="true" class="editor__header">${document.title}</h1>
-      <div contenteditable="true" class="editor__content">${
+      <div contenteditable="true" class="editor__content" placeholder="내용을 입력해주세요.">${
         document.content || ''
       }</div>
     </div>

@@ -61,6 +61,12 @@ main {
   height: 100%;
 }
 
+[contenteditable='true']:empty:before {
+  content: attr(placeholder);
+  color: gray;
+  display: block; /* For Firefox */
+}
+
 /* Side Bar */
 #sidebar {
   background-color: var(--grey-light-color);
