@@ -73,7 +73,7 @@ export default function App({ $target }) {
   const handleClickLogo = () => {
     this.editor.setState({ nextCurrDocument: {} });
     this.sidebar.setState({
-      nextCurrDocumentId: null,
+      nextSelectedDocumentId: null,
     });
     dispatchRouteEvent('/');
   };
