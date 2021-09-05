@@ -9,13 +9,13 @@ export default function App({ $target }) {
   const handleAddDocument = async newDocument => {
     const { id } = await API.addDocument(newDocument);
 
-    this.rootDocuments = await API.getRootDocuments();
-    this.currDocument = await API.getDocument(id);
+    const rootDocuments = await API.getRootDocuments();
+    const currDocument = await API.getDocument(id);
 
-    this.editor.setState({ nextCurrDocument: this.currDocument });
+    this.editor.setState({ nextCurrDocument: currDocument });
     this.sidebar.setState({
-      nextRootDocuments: this.rootDocuments,
-      nextSelectedDocumentId: this.currDocument.id,
+      nextRootDocuments: rootDocuments,
+      nextSelectedDocumentId: currDocument.id,
     });
   };
 
@@ -26,31 +26,35 @@ export default function App({ $target }) {
     };
     await API.updateDocument(id, document);
 
-    this.rootDocuments = await API.getRootDocuments();
-    this.currDocument = await API.getDocument(id);
+    const rootDocuments = await API.getRootDocuments();
+    const currDocument = await API.getDocument(id);
 
-    this.editor.setState({ nextCurrDocument: this.currDocument });
+    this.editor.setState({ nextCurrDocument: currDocument });
     this.sidebar.setState({
-      nextRootDocuments: this.rootDocuments,
-      nextSelectedDocumentId: this.currDocument.id,
+      nextRootDocuments: rootDocuments,
+      nextSelectedDocumentId: currDocument.id,
     });
   };
 
   const handleDeleteDocument = async id => {
     await API.deleteDocument(id);
-    this.rootDocuments = await API.getRootDocuments();
+    const rootDocuments = await API.getRootDocuments();
+    const nextToggledDocuments = this.sidebar.toggledDocuments.filter(
+      toggledId => toggledId !== id
+    );
+    this.editor.setState({ nextCurrDocument: {} });
     this.sidebar.setState({
-      nextRootDocuments: this.rootDocuments,
+      nextRootDocuments: rootDocuments,
       nextCurrDocumentId: null,
+      nextToggledDocuments,
     });
-    this.editor.setState({ nextCurrDocument: this.currDocument });
   };
 
   const handleClickDocument = async id => {
-    this.currDocument = await API.getDocument(id);
-    this.editor.setState({ nextCurrDocument: this.currDocument });
+    const currDocument = await API.getDocument(id);
+    this.editor.setState({ nextCurrDocument: currDocument });
     this.sidebar.setState({
-      nextSelectedDocumentId: this.currDocument.id,
+      nextSelectedDocumentId: currDocument.id,
     });
   };
 
@@ -59,11 +63,6 @@ export default function App({ $target }) {
     this.sidebar.setState({
       nextCurrDocumentId: null,
     });
-  };
-
-  const initState = async () => {
-    this.rootDocuments = await API.getRootDocuments();
-    this.currDocument = {};
   };
 
   this.route = async () => {
@@ -86,11 +85,12 @@ export default function App({ $target }) {
   };
 
   const init = async () => {
-    await initState();
+    const rootDocuments = await API.getRootDocuments();
+    const currDocument = {};
 
     this.sidebar = new Sidebar({
       $target,
-      rootDocuments: this.rootDocuments,
+      rootDocuments: rootDocuments,
       currDocumentId: null,
       onAddDocument: handleAddDocument,
       onDeleteDocument: handleDeleteDocument,
@@ -99,7 +99,7 @@ export default function App({ $target }) {
     });
     this.editor = new Editor({
       $target,
-      currDocument: this.currDocument,
+      currDocument: currDocument,
       onUpdateDocument: handleUpdateDocument,
     });
 

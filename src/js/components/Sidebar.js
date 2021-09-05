@@ -67,16 +67,31 @@ export default function Sidebar({
   const openDocument = target => {
     console.log('open');
     const { id: targetId } = target.closest('.document-item').dataset;
+    console.log('targetId: ', targetId);
+    if (this.toggledDocuments.includes(Number(targetId))) return;
     const nextToggledDocuments = [...this.toggledDocuments, Number(targetId)];
     this.setState({
       nextToggledDocuments,
     });
+    console.log('this.toggledDocuments: ', this.toggledDocuments);
   };
 
   const closeDocument = target => {
     console.log('close');
     const { id: targetId } = target.closest('.document-item').dataset;
     console.log('targetId: ', targetId);
+    this.toggledDocuments.forEach(id => {
+      console.log(
+        'id:',
+        id,
+        typeof id,
+        ' / ',
+        'targetId:',
+        Number(targetId),
+        typeof Number(targetId),
+        id !== Number(targetId)
+      );
+    });
     const nextToggledDocuments = this.toggledDocuments.filter(
       id => id !== Number(targetId)
     );
