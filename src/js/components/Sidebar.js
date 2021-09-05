@@ -76,6 +76,7 @@ export default function Sidebar({
   const closeDocument = target => {
     console.log('close');
     const { id: targetId } = target.closest('.document-item').dataset;
+    console.log('targetId: ', targetId);
     const nextToggledDocuments = this.toggledDocuments.filter(
       id => id !== Number(targetId)
     );
@@ -173,6 +174,7 @@ export default function Sidebar({
   };
 
   $sidebar.addEventListener('click', async ({ target }) => {
+    console.log(target);
     if (target.matches('.logo-title') || target.matches('.fa-accusoft')) {
       onClickLogo();
       return;

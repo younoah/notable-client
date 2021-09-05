@@ -8,8 +8,10 @@ import { catchRouteEvent } from './utils/router.js';
 export default function App({ $target }) {
   const handleAddDocument = async newDocument => {
     const { id } = await API.addDocument(newDocument);
+
     this.rootDocuments = await API.getRootDocuments();
     this.currDocument = await API.getDocument(id);
+
     this.editor.setState({ nextCurrDocument: this.currDocument });
     this.sidebar.setState({
       nextRootDocuments: this.rootDocuments,
@@ -23,51 +25,45 @@ export default function App({ $target }) {
       content,
     };
     await API.updateDocument(id, document);
-    setRootDocuments();
-    setCurrDocument(id);
+
+    this.rootDocuments = await API.getRootDocuments();
+    this.currDocument = await API.getDocument(id);
+
+    this.editor.setState({ nextCurrDocument: this.currDocument });
+    this.sidebar.setState({
+      nextRootDocuments: this.rootDocuments,
+      nextSelectedDocumentId: this.currDocument.id,
+    });
   };
 
   const handleDeleteDocument = async id => {
     await API.deleteDocument(id);
-    setRootDocuments();
-    setCurrDocument(null);
+    this.rootDocuments = await API.getRootDocuments();
+    this.sidebar.setState({
+      nextRootDocuments: this.rootDocuments,
+      nextCurrDocumentId: null,
+    });
+    this.editor.setState({ nextCurrDocument: this.currDocument });
   };
 
-  const handleClickDocument = id => {
-    setCurrDocument(id);
+  const handleClickDocument = async id => {
+    this.currDocument = await API.getDocument(id);
+    this.editor.setState({ nextCurrDocument: this.currDocument });
+    this.sidebar.setState({
+      nextSelectedDocumentId: this.currDocument.id,
+    });
   };
 
   const handleClickLogo = () => {
     this.editor.setState({ nextCurrDocument: {} });
+    this.sidebar.setState({
+      nextCurrDocumentId: null,
+    });
   };
 
   const initState = async () => {
     this.rootDocuments = await API.getRootDocuments();
     this.currDocument = {};
-  };
-
-  const setCurrDocument = async id => {
-    if (id) {
-      this.currDocument = await API.getDocument(id);
-      this.editor.setState({ nextCurrDocument: this.currDocument });
-      this.sidebar.setState({
-        nextSelectedDocumentId: this.currDocument.id,
-        nextToggledDocuments: [
-          ...this.sidebar.toggledDocuments,
-          this.currDocument.id,
-        ],
-      });
-    } else {
-      this.currDocument = {};
-      this.editor.setState({ nextCurrDocument: this.currDocument });
-      this.sidebar.setState({ nextCurrDocumentId: null });
-    }
-  };
-
-  const setRootDocuments = async () => {
-    this.rootDocuments = await API.getRootDocuments();
-
-    this.sidebar.setState({ nextRootDocuments: this.rootDocuments });
   };
 
   this.route = async () => {
