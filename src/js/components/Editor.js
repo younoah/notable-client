@@ -42,7 +42,7 @@ export default function Editor({ $target, currDocument = {} }) {
       clearTimeout(debounceTimer);
     }
 
-    const id = this.state.id;
+    const id = this.currDocument.id;
     const title = $('.editor__header', $editor).innerText.trim();
     const content = $('.editor__content', $editor).innerText.trim();
 
