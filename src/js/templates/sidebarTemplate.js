@@ -36,7 +36,7 @@ function sidebarTemplate(
   this.toggledDocumentIds = toggledDocumentIds;
   this.selectedDocumentId = selectedDocumentId;
 
-  const isToggledChild = document => {
+  const isToggledDocumentChild = document => {
     let res = false;
     const parentDocument = getParentDocumentById(
       this.rootDocuments,
@@ -55,7 +55,7 @@ function sidebarTemplate(
 
     return /* html */ `
       <ul class="document-list ${
-        isRoot || isToggledChild(document) ? '' : 'hide'
+        isRoot || isToggledDocumentChild(document) ? '' : 'hide'
       }">
         <li data-id=${document.id} class="document-item">
           <div class="document-container ${

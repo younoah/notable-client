@@ -36,12 +36,9 @@ export default function App({ $target }) {
       content,
     };
     await API.updateDocument(id, document);
-    const currDocument = await API.getDocument(id);
     const rootDocuments = await API.getRootDocuments();
-    this.editor.setState({ nextCurrDocument: currDocument });
     this.sidebar.setState({
       nextRootDocuments: rootDocuments,
-      nextSelectedDocumentId: currDocument.id,
     });
   };
 
