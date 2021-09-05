@@ -238,3 +238,30 @@ main {
 .editor__content {
   height: 90vh;
 }
+
+.editor__logo {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor__logo-image .fa-accusoft {
+  color: var(--blue-color);
+  font-size: 10rem;
+}
+
+.editor__logo-title {
+  font-size: 3rem;
+}
+
+.editor__logo-comment {
+  margin: var(--padding);
+  font-size: 1rem;
+}
+
+.editor__logo-comment .strong {
+  font-size: 1.2rem;
+  font-weight: bold;
+}

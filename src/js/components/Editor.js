@@ -20,7 +20,17 @@ export default function Editor({ $target, currDocument = {} }) {
 
   this.render = () => {
     if (Object.keys(this.currDocument).length <= 0) {
-      $editor.innerHTML = /* html */ `<h1>나만의 작은 문서공간!</h1>`;
+      $editor.innerHTML = /* html */ `
+        <div class="editor__logo">
+          <div class="editor__logo-image">
+            <i class="fab fa-accusoft"></i>
+          </div>
+          <span class="editor__logo-title">Notable</span>
+          <span class="editor__logo-comment"
+            ><strong>'지혜'</strong>는 생각났을 때 <strong>'기록'<strong>하는 것이다.</span
+          >
+        </div>
+      `;
       return;
     }
 
