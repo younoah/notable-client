@@ -2,6 +2,13 @@
 
 import { getParentDocumentById } from '../utils/document.js';
 
+const MESSAGE = Object.freeze({
+  NEW_DOCUMENT: '새로 추가할 문서의 제목을 작성해주세요.',
+  DELETE_DOCUMENT: '정말 해당 문서를 삭제하시겠습니까?',
+});
+
+const DEFAULT_DOCUMENT_TITLE = '제목없음';
+
 export default function Sidebar({
   $target,
   rootDocuments = [],
@@ -34,7 +41,7 @@ export default function Sidebar({
   };
 
   const addDocument = async (parentId = null) => {
-    const title = prompt('새로 추가할 문서의 제목을 작성해주세요.');
+    const title = prompt(MESSAGE.NEW_DOCUMENT);
 
     if (title === null) {
       return;
@@ -42,7 +49,7 @@ export default function Sidebar({
 
     const newDocument = {
       parent: parentId,
-      title: title.trim() !== '' ? title.trim() : '제목없음',
+      title: title.trim() !== '' ? title.trim() : DEFAULT_DOCUMENT_TITLE,
     };
 
     onAddDocument(newDocument);
@@ -191,7 +198,7 @@ export default function Sidebar({
     }
 
     if (target.matches('.fa-trash')) {
-      if (!confirm('정말 해당 문서를 삭제하시겠습니까?')) return;
+      if (!confirm(MESSAGE.DELETE_DOCUMENT)) return;
       const { id } = target.closest('li').dataset;
       onDeleteDocument(Number(id));
       return;

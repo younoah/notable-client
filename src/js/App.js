@@ -16,10 +16,10 @@ export default function App({ $target }) {
     const rootDocuments = await API.getRootDocuments();
     const currDocument = await API.getDocument(id);
     const parentDocument = getParentDocumentById(rootDocuments, Number(id));
-    const nextToggledDocumentIds = [
-      ...this.sidebar.toggledDocumentIds,
-      parentDocument.id,
-    ];
+    const nextToggledDocumentIds = [...this.sidebar.toggledDocumentIds];
+    if (parentDocument) {
+      nextToggledDocumentIds.push(parentDocument.id);
+    }
 
     this.editor.setState({ nextCurrDocument: currDocument });
     this.sidebar.setState({
