@@ -1,3 +1,5 @@
+'use strict';
+
 const ROUTE_CHANGE_EVENT_NAME = 'route-change';
 
 export const dispatchRouteEvent = nextUrl => {
