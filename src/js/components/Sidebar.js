@@ -34,7 +34,17 @@ export default function Sidebar({
     this.selectedDocumentId = nextSelectedDocumentId;
     this.toggledDocuments = nextToggledDocuments;
 
-    // 선택된 아이디의 부모가 만약 this.toggledDocuments에 없다면 부모를 this.toggledDocuments에 추가하기
+    const parentDocument = getParentDocumentById(
+      this.rootDocuments,
+      this.selectedDocumentId
+    );
+
+    if (
+      parentDocument !== null &&
+      !this.toggledDocuments.includes(parentDocument.id)
+    ) {
+      this.toggledDocuments.push(parentDocument.id);
+    }
 
     this.render();
   };
@@ -55,6 +65,7 @@ export default function Sidebar({
   };
 
   const openDocument = target => {
+    console.log('open');
     const { id: targetId } = target.closest('.document-item').dataset;
     const nextToggledDocuments = [...this.toggledDocuments, Number(targetId)];
     this.setState({
@@ -63,6 +74,7 @@ export default function Sidebar({
   };
 
   const closeDocument = target => {
+    console.log('close');
     const { id: targetId } = target.closest('.document-item').dataset;
     const nextToggledDocuments = this.toggledDocuments.filter(
       id => id !== Number(targetId)
@@ -70,6 +82,7 @@ export default function Sidebar({
     this.setState({
       nextToggledDocuments,
     });
+    console.log('this.toggledDocuments: ', this.toggledDocuments);
   };
 
   const isToggledChild = document => {
