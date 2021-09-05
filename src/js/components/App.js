@@ -3,7 +3,7 @@
 import Sidebar from './Sidebar.js';
 import Editor from './Editor.js';
 import { API } from '../utils/api.js';
-import { catchRouteEvent } from '../utils/router.js';
+import { initListenRouteEvent } from '../utils/router.js';
 
 export default function App({ $target }) {
   const sidebar = new Sidebar({
@@ -38,7 +38,7 @@ export default function App({ $target }) {
   };
 
   this.route();
-  catchRouteEvent(() => {
+  initListenRouteEvent(() => {
     this.route();
   });
 }

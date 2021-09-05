@@ -3,7 +3,7 @@
 import Sidebar from './components/Sidebar.js';
 import Editor from './components/Editor.js';
 import { API } from './utils/api.js';
-import { catchRouteEvent } from './utils/router.js';
+import { initListenRouteEvent, dispatchRouteEvent } from './utils/router.js';
 import { getParentDocumentById } from './utils/document.js';
 
 export default function App({ $target }) {
@@ -24,6 +24,7 @@ export default function App({ $target }) {
       nextSelectedDocumentId: currDocument.id,
       nextToggledDocumentIds,
     });
+    dispatchRouteEvent(`/documents/${id}`);
   };
 
   const handleUpdateDocument = async (id, title, content) => {
@@ -63,6 +64,7 @@ export default function App({ $target }) {
     this.sidebar.setState({
       nextSelectedDocumentId: currDocument.id,
     });
+    dispatchRouteEvent(`/documents/${id}`);
   };
 
   const handleClickLogo = () => {
@@ -70,28 +72,10 @@ export default function App({ $target }) {
     this.sidebar.setState({
       nextCurrDocumentId: null,
     });
+    dispatchRouteEvent('/');
   };
 
-  this.route = async () => {
-    const { pathname } = location;
-
-    this.sidebar.render();
-
-    if (pathname === '/') {
-      this.editor.setState({ nextCurrDocument: {} });
-    } else if (pathname.indexOf('/documents/') === 0) {
-      const [, , id] = pathname.split('/');
-      const document = await API.getDocument(id);
-      this.editor.setState({ nextCurrDocument: document });
-    }
-  };
-
-  this.render = () => {
-    this.sidebar.render();
-    this.editor.render();
-  };
-
-  const init = async () => {
+  const initComponents = async () => {
     const rootDocuments = await API.getRootDocuments();
     const currDocument = {};
 
@@ -109,10 +93,43 @@ export default function App({ $target }) {
       currDocument: currDocument,
       onUpdateDocument: handleUpdateDocument,
     });
-
-    this.render();
   };
 
-  init();
-  catchRouteEvent(() => this.route());
+  const initialize = async () => {
+    await initComponents();
+    await this.route();
+  };
+
+  this.route = async () => {
+    const { pathname } = location;
+
+    if (pathname === '/') {
+      this.sidebar.render();
+      this.editor.setState({ nextCurrDocument: {} });
+    } else if (pathname.indexOf('/documents/') === 0) {
+      const [, , id] = pathname.split('/');
+      const rootDocuments = await API.getRootDocuments();
+      const currDocument = await API.getDocument(id);
+      const parentDocument = getParentDocumentById(rootDocuments, Number(id));
+      const nextToggledDocumentIds = [...this.sidebar.toggledDocumentIds];
+      parentDocument && nextToggledDocumentIds.push(parentDocument.id);
+
+      this.editor.setState({ nextCurrDocument: currDocument });
+      this.sidebar.setState({
+        nextRootDocuments: rootDocuments,
+        nextSelectedDocumentId: currDocument.id,
+        nextToggledDocumentIds,
+      });
+    }
+  };
+
+  this.render = () => {
+    this.sidebar.render();
+    this.editor.render();
+  };
+
+  initialize();
+  initListenRouteEvent(() => {
+    this.route();
+  });
 }

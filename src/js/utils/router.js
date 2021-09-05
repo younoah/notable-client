@@ -6,12 +6,12 @@ export const dispatchRouteEvent = nextUrl => {
   );
 };
 
-export const catchRouteEvent = onRoute => {
+export const initListenRouteEvent = onRoute => {
   window.addEventListener(ROUTE_CHANGE_EVENT_NAME, e => {
     const { nextUrl } = e.detail;
-    // const { pathname: currUrl } = location;
+    const { pathname: currUrl } = location;
 
-    // if (currUrl === nextUrl) return;
+    if (currUrl === nextUrl) return;
     if (!nextUrl) return;
 
     history.pushState(null, null, nextUrl);

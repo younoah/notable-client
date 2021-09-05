@@ -30,11 +30,6 @@ export default function Sidebar({
     this.selectedDocumentId = nextSelectedDocumentId;
     this.toggledDocumentIds = nextToggledDocumentIds;
 
-    const parentDocument = getParentDocumentById(
-      this.rootDocuments,
-      this.selectedDocumentId
-    );
-
     this.render();
   };
 
