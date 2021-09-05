@@ -1,10 +1,6 @@
 'use strict';
 
-import {
-  getChildDocumentsById,
-  getChildDocumentIdsById,
-  getParentDocumentById,
-} from '../utils/document.js';
+import { getParentDocumentById } from '../utils/document.js';
 
 export default function Sidebar({
   $target,
@@ -22,17 +18,17 @@ export default function Sidebar({
   const initState = () => {
     this.rootDocuments = rootDocuments;
     this.selectedDocumentId = selectedDocumentId;
-    this.toggledDocuments = [];
+    this.toggledDocumentIds = [];
   };
 
   this.setState = ({
     nextRootDocuments = this.rootDocuments,
     nextSelectedDocumentId = this.selectedDocumentId,
-    nextToggledDocuments = this.toggledDocuments,
+    nextToggledDocumentIds = this.toggledDocumentIds,
   }) => {
     this.rootDocuments = nextRootDocuments;
     this.selectedDocumentId = nextSelectedDocumentId;
-    this.toggledDocuments = nextToggledDocuments;
+    this.toggledDocumentIds = nextToggledDocumentIds;
 
     const parentDocument = getParentDocumentById(
       this.rootDocuments,
@@ -60,20 +56,23 @@ export default function Sidebar({
   const openDocument = target => {
     const { id: targetId } = target.closest('.document-item').dataset;
 
-    if (this.toggledDocuments.includes(Number(targetId))) return;
-    const nextToggledDocuments = [...this.toggledDocuments, Number(targetId)];
+    if (this.toggledDocumentIds.includes(Number(targetId))) return;
+    const nextToggledDocumentIds = [
+      ...this.toggledDocumentIds,
+      Number(targetId),
+    ];
     this.setState({
-      nextToggledDocuments,
+      nextToggledDocumentIds,
     });
   };
 
   const closeDocument = target => {
     const { id: targetId } = target.closest('.document-item').dataset;
-    const nextToggledDocuments = this.toggledDocuments.filter(
+    const nextToggledDocumentIds = this.toggledDocumentIds.filter(
       id => id !== Number(targetId)
     );
     this.setState({
-      nextToggledDocuments,
+      nextToggledDocumentIds,
     });
   };
 
@@ -84,7 +83,7 @@ export default function Sidebar({
       document.id
     );
 
-    if (this.toggledDocuments.includes(parentDocument.id)) {
+    if (this.toggledDocumentIds.includes(parentDocument.id)) {
       res = true;
     }
 
@@ -106,7 +105,7 @@ export default function Sidebar({
               childrenLength > 0
                 ? /* html */ `
               <button class="more-button ${
-                this.toggledDocuments.includes(id) ? 'toggled' : ''
+                this.toggledDocumentIds.includes(id) ? 'toggled' : ''
               }">
                 <i class="fas fa-caret-right"></i>
               </button>

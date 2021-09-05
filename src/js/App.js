@@ -13,8 +13,8 @@ export default function App({ $target }) {
     const rootDocuments = await API.getRootDocuments();
     const currDocument = await API.getDocument(id);
     const parentDocument = getParentDocumentById(rootDocuments, Number(id));
-    const nextToggledDocuments = [
-      ...this.sidebar.toggledDocuments,
+    const nextToggledDocumentIds = [
+      ...this.sidebar.toggledDocumentIds,
       parentDocument.id,
     ];
 
@@ -22,7 +22,7 @@ export default function App({ $target }) {
     this.sidebar.setState({
       nextRootDocuments: rootDocuments,
       nextSelectedDocumentId: currDocument.id,
-      nextToggledDocuments,
+      nextToggledDocumentIds,
     });
   };
 
@@ -46,14 +46,14 @@ export default function App({ $target }) {
   const handleDeleteDocument = async id => {
     await API.deleteDocument(id);
     const rootDocuments = await API.getRootDocuments();
-    const nextToggledDocuments = this.sidebar.toggledDocuments.filter(
+    const nextToggledDocumentIds = this.sidebar.toggledDocumentIds.filter(
       toggledId => toggledId !== id
     );
     this.editor.setState({ nextCurrDocument: {} });
     this.sidebar.setState({
       nextRootDocuments: rootDocuments,
       nextCurrDocumentId: null,
-      nextToggledDocuments,
+      nextToggledDocumentIds,
     });
   };
 
