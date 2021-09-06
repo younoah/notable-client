@@ -45,7 +45,8 @@ export default function Editor({
     }
 
     const id = this.currDocument.id;
-    const title = $('.editor__header', $editor).innerText.trim();
+    const titleText = $('.editor__header', $editor).innerText.trim();
+    const title = titleText === '' ? '제목없음' : titleText;
     const content = $('.editor__content', $editor).innerText.trim();
 
     debounceTimer = setTimeout(async () => {
