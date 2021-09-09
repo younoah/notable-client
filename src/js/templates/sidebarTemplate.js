@@ -110,7 +110,7 @@ function sidebarTemplate(
       <div class="sidebar__add-button">
         <button class="add-root-button">
           <i class="fas fa-plus"></i>
-          <span class="add-root-button-title">New Document</span>
+          <span class="add-root-button-title">New Root Document</span>
         </button>
       </div>
       <div class="sidebar__document-list-container">

@@ -117,10 +117,11 @@ main {
 .add-root-button {
   margin-top: var(--padding);
   font-size: var(--font-large);
+  color: var(--grey-dark-color);
 }
 
 .add-root-button:hover {
-  font-size: var(--font-extra-large);
+  color: var(--black-color);
 }
 
 .sidebar__document-list-container {
@@ -205,18 +206,19 @@ main {
 .add-button,
 .delete-button {
   margin-right: var(--padding);
+  color: lightgrey;
 }
 
 .add-button:hover {
-  font-size: var(--font-medium);
+  color: var(--black-color);
 }
 .delete-button:hover {
-  font-size: var(--font-medium);
-}
-
-.delete-button {
   color: var(--red-color);
 }
+
+/* .delete-button {
+  color: var(--grey-dark-color);
+} */
 
 /* Editor */
 #editor {
